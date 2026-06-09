@@ -1,0 +1,147 @@
+/* ============================================================
+ * STARTER KIT v3 — globals.css  (NEUTRAL DEFAULT)
+ *
+ * The executable design system: the full token CONTRACT with
+ * NEUTRAL brand values. A new project swaps VALUES (primary/accent/
+ * ring + optional brand font + radius), never STRUCTURE.
+ *
+ * Format: Tailwind 3.4 + shadcn. CSS vars as HSL, no hsl() wrapper.
+ * Mapped in tailwind.config.ts. Hex in comments = human reference only.
+ *
+ * Components read SEMANTIC utilities only (bg-primary, text-destructive,
+ * bg-card, border-border, text-role-admin). NEVER numbered colors.
+ *
+ * Dark mode here already bakes in the Run 001 L16 readability fix:
+ * background sits BELOW card so panels elevate; muted-foreground is
+ * lifted; borders are firm. Do not flatten background and card.
+ *
+ * NO CORAL. NO BRAND. Coral/Saira/Metro-radius are a Stage-2 value swap.
+ * ============================================================ */
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  /* ── LIGHT (default) ────────────────────────────────────── */
+  :root {
+    --background: 220 14% 96%;          /* #f1f3f5 — sits below card so cards lift */
+    --foreground: 222 22% 16%;          /* #20242e */
+    --card: 0 0% 100%;                  /* #ffffff */
+    --card-foreground: 222 22% 16%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 222 22% 16%;
+
+    /* brand — NEUTRAL placeholder (swap per project) */
+    --primary: 222 47% 11%;             /* #0f172a near-black slate */
+    --primary-foreground: 210 40% 98%;
+    --secondary: 220 14% 92%;           /* #e6e9ee panel */
+    --secondary-foreground: 222 22% 16%;
+    --muted: 220 14% 90%;               /* #e1e5ea */
+    --muted-foreground: 220 9% 42%;     /* #61676f readable secondary text */
+    --accent: 220 14% 92%;
+    --accent-foreground: 222 22% 16%;
+
+    --border: 220 12% 82%;              /* #c9cdd5 */
+    --input: 220 12% 82%;
+    --ring: 222 47% 11%;                /* matches neutral brand */
+
+    /* semantic status — FIXED MEANING across all themes */
+    --destructive: 0 72% 45%;           /* #c62525 bad/lost */
+    --destructive-foreground: 0 0% 100%;
+    --success: 142 60% 36%;             /* #25934a good/done */
+    --success-foreground: 0 0% 100%;
+    --warning: 38 92% 45%;              /* #de8c08 attention/pending */
+    --warning-foreground: 0 0% 100%;
+    --info: 214 80% 50%;                /* #1a73e8 neutral count */
+    --info-foreground: 0 0% 100%;
+
+    /* role identities — NOT statuses. admin must NOT reuse destructive red */
+    --role-superadmin: 262 60% 50%;     /* #6d33cc violet */
+    --role-superadmin-foreground: 0 0% 100%;
+    --role-admin: 214 80% 50%;          /* #1a73e8 blue — distinct from destructive */
+    --role-admin-foreground: 0 0% 100%;
+    --role-member: 142 60% 36%;         /* #25934a green */
+    --role-member-foreground: 0 0% 100%;
+
+    /* data-viz */
+    --chart-1: 214 80% 50%;             /* blue */
+    --chart-2: 142 60% 36%;             /* green */
+    --chart-3: 38 92% 45%;              /* amber */
+    --chart-4: 262 60% 50%;             /* violet */
+    --chart-5: 0 72% 45%;               /* red */
+
+    --radius: 0.5rem;                   /* standard rounded; swap per project (0 = Metro) */
+  }
+
+  /* ── DARK ───────────────────────────────────────────────── */
+  /* L16 readability pass: background BELOW card; muted-foreground
+     lifted; borders firmed. Keep this relationship. */
+  .dark {
+    --background: 222 18% 11%;          /* #171a21 — page, darker than card */
+    --foreground: 220 22% 93%;          /* #e7eaf0 */
+    --card: 222 16% 17%;                /* #252a33 — elevated surface */
+    --card-foreground: 220 22% 93%;
+    --popover: 222 16% 17%;
+    --popover-foreground: 220 22% 93%;
+
+    --primary: 210 40% 98%;             /* near-white neutral brand in dark */
+    --primary-foreground: 222 47% 11%;
+    --secondary: 221 15% 24%;           /* #343a45 */
+    --secondary-foreground: 220 22% 93%;
+    --muted: 222 15% 19%;               /* #282d36 */
+    --muted-foreground: 218 14% 72%;    /* #a7aeba — readable placeholders/secondary */
+    --accent: 221 15% 24%;
+    --accent-foreground: 220 22% 93%;
+
+    --border: 217 13% 30%;              /* #434a57 — firm edges */
+    --input: 217 13% 30%;
+    --ring: 210 40% 90%;
+
+    /* semantic — brightened for dark surfaces, same meaning */
+    --destructive: 0 75% 64%;           /* #e85d5d */
+    --destructive-foreground: 222 20% 12%;
+    --success: 142 64% 56%;             /* #45c878 */
+    --success-foreground: 222 20% 12%;
+    --warning: 38 92% 55%;              /* #f0a52a */
+    --warning-foreground: 222 20% 12%;
+    --info: 214 85% 64%;                /* #5295f0 */
+    --info-foreground: 222 20% 12%;
+
+    /* role identities — brightened, same identity */
+    --role-superadmin: 262 70% 70%;     /* #a986e6 */
+    --role-superadmin-foreground: 222 20% 12%;
+    --role-admin: 214 85% 64%;          /* #5295f0 */
+    --role-admin-foreground: 222 20% 12%;
+    --role-member: 142 64% 56%;         /* #45c878 */
+    --role-member-foreground: 222 20% 12%;
+
+    --chart-1: 214 85% 64%;
+    --chart-2: 142 64% 56%;
+    --chart-3: 38 92% 55%;
+    --chart-4: 262 70% 70%;
+    --chart-5: 0 75% 64%;
+  }
+
+  /* ── OPTIONAL ALTERNATES (Theme Library) ────────────────── */
+  /* Bright: pure-white light. <html class="theme-bright"> */
+  .theme-bright { --background: 0 0% 100%; --secondary: 220 14% 95%; --muted: 220 14% 93%; }
+  /* Dark-deep: near-black dark. <html class="dark theme-deep"> */
+  .dark.theme-deep { --background: 222 20% 8%; --card: 222 17% 13%; --popover: 222 17% 13%; }
+}
+
+@layer base {
+  * { @apply border-border; }
+  body {
+    @apply bg-background text-foreground;
+    scroll-behavior: smooth;
+  }
+
+  /* h1–h6 base reset — SEMANTIC only (was numbered text-gray-900 dark:text-white) */
+  h1 { @apply text-4xl font-bold text-foreground; }
+  h2 { @apply text-3xl font-bold text-foreground; }
+  h3 { @apply text-2xl font-bold text-foreground; }
+  h4 { @apply text-xl  font-bold text-foreground; }
+  h5 { @apply text-lg  font-bold text-foreground; }
+  h6 { @apply text-base font-bold text-foreground; }
+}
