@@ -13,7 +13,7 @@ const HomePage = () => {
           Your Product
         </h1>
         <p className="mt-6 text-lg text-muted-foreground max-w-2xl mx-auto">
-          A neutral starter for what you're building next. Token-driven UI,
+          A neutral starter for what you&apos;re building next. Token-driven UI,
           three-tier RBAC out of the box, dark mode that actually reads.
         </p>
         <div className="mt-8 flex flex-col lg:flex-row gap-3 justify-center items-center">

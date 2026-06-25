@@ -160,16 +160,6 @@ describe('Superadmin Portal Actions', () => {
         error: null,
       });
 
-      const mockProfileUpdate = jest.fn().mockResolvedValue({
-        data: {},
-        error: null,
-      });
-
-      const mockRoleUpdate = jest.fn().mockResolvedValue({
-        data: {},
-        error: null,
-      });
-
       const mockProfileEq = jest.fn().mockResolvedValue({
         data: {},
         error: null,
@@ -219,11 +209,6 @@ describe('Superadmin Portal Actions', () => {
     it('revalidates the superadmin-portal path on success', async () => {
       const mockUpdateUserById = jest.fn().mockResolvedValue({
         data: { user: { id: 'user-123' } },
-        error: null,
-      });
-
-      const mockUpdate = jest.fn().mockResolvedValue({
-        data: {},
         error: null,
       });
 

@@ -8,7 +8,7 @@ import { createClient } from "./server";
 export async function protectPage(allowedRoles: AppRole[]) {
   const supabase = await createClient();
 
-  const { data, error } = await supabase.auth.getUser();
+  const { data } = await supabase.auth.getUser();
   const user = data?.user ?? null;
 
   if (!user) {

@@ -2,7 +2,6 @@
  * @jest-environment jsdom
  */
 
-import React from 'react';
 import { render, screen } from '@testing-library/react';
 import '@testing-library/jest-dom';
 import SuperadminPortalPageContent from '@/app/(superadmin)/superadmin-portal/SuperadminPortalPageContent';
@@ -137,7 +136,7 @@ describe('SuperadminPortalPageContent', () => {
     });
 
     const Component = await SuperadminPortalPageContent({ page: 1 });
-    const { container } = render(Component);
+    render(Component);
 
     // Check for role labels
     expect(screen.getByText(/Role: Admin/i)).toBeInTheDocument();

@@ -12,7 +12,7 @@ export function useLogoutHandler() {
       router.refresh();
       router.push("/auth");
     } catch (error) {
-      console.error("Failed to log out");
+      console.error("Failed to log out:", error);
     }
   };
 }

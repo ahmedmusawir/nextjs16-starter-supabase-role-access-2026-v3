@@ -1,4 +1,4 @@
-import { EnvelopeIcon, PhoneIcon } from "@heroicons/react/20/solid";
+import { PhoneIcon } from "@heroicons/react/20/solid";
 import { Button } from "../ui/button";
 
 const people = [

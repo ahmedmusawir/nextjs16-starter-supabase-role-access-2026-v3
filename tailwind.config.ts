@@ -1,4 +1,8 @@
 import type { Config } from "tailwindcss";
+import typography from "@tailwindcss/typography";
+import aspectRatio from "@tailwindcss/aspect-ratio";
+import gridAutoFit from "@shrutibalasa/tailwind-grid-auto-fit";
+import animate from "tailwindcss-animate";
 
 const config = {
   darkMode: ["class"],
@@ -105,12 +109,7 @@ const config = {
       },
     },
   },
-  plugins: [
-    require("@tailwindcss/typography"),
-    require("@tailwindcss/aspect-ratio"),
-    require("@shrutibalasa/tailwind-grid-auto-fit"),
-    require("tailwindcss-animate"),
-  ],
+  plugins: [typography, aspectRatio, gridAutoFit, animate],
 } satisfies Config;
 
 export default config;

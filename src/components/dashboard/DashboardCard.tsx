@@ -1,6 +1,6 @@
 import React from "react";
 import { Card, CardContent } from "../ui/card";
-import { LucideIcon, Newspaper } from "lucide-react";
+import { LucideIcon } from "lucide-react";
 
 interface DashboardCardProps {
   title: string;
