@@ -18,6 +18,9 @@ type ToasterToast = ToastProps & {
   action?: ToastActionElement
 }
 
+// `actionTypes` is consumed only as a type (`typeof actionTypes` below); the
+// value is intentionally unused at runtime. This is the stock ShadCN toast.
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const actionTypes = {
   ADD_TOAST: "ADD_TOAST",
   UPDATE_TOAST: "UPDATE_TOAST",
