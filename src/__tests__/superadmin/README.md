@@ -120,6 +120,15 @@ it('CRITICAL: packs BOTH full_name and role into user_metadata payload', async (
 });
 ```
 
+> ⚠️ **Reality note (corrected):** Although `addUser` packs `role` into the
+> `user_metadata` payload, the DB trigger `handle_new_user()` does **NOT** read it
+> — it hardcodes the default `'member'` role (`supabase/setup.sql:94-96`). The
+> requested role is applied in a **second step**: the app updates the `user_roles`
+> table after `createUser`. The `role` key in `user_metadata` is currently
+> **vestigial**. `user_roles` is the authorization source of truth — never
+> `user_metadata`. (This test still validly checks the payload shape; it does not
+> imply the trigger consumes `role`.)
+
 ---
 
 ### 4. **SuperadminPortalPageContent.test.tsx** — Dashboard UI Tests
@@ -229,7 +238,7 @@ jest.mock('@/app/(superadmin)/superadmin-portal/actions', () => ({
 |-----------|-------------------|---------|
 | `AddUserForm.test.tsx` | Password match validation | Ensures confirm password field works |
 | `EditUserForm.test.tsx` | Email field is `disabled` | Prevents email modification |
-| `actions.test.ts` | `user_metadata` contains `full_name` AND `role` | Ensures smart trigger receives both values |
+| `actions.test.ts` | `user_metadata` contains `full_name` AND `role` | Verifies the `createUser` payload shape. NOTE: the trigger does NOT read `role` (defaults to `'member'`); the role is applied separately via a `user_roles` update. |
 | `SuperadminPortalPageContent.test.tsx` | Only 6 cards rendered | Verifies pagination limit enforcement |
 | `actions.test.ts` (RBAC) | Member/Admin denied superadmin access | Ensures route protection works |
 
