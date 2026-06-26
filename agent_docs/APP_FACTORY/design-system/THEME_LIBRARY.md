@@ -27,8 +27,6 @@ Shared across **all four** (these never change between modes — brand + meaning
 | Destructive (money lost) | red — `2 67% 51%` light / `351 95% 71%` dark |
 | Info (neutral count) | blue `#2f7ce0` → `214 74% 53%` |
 | Warning (pending) | amber `#e8a008` → `41 93% 47%` |
-| Role — superadmin / admin / member | identity tokens (see Starter Kit Handbook §2 — admin must be distinct from destructive) |
-| Nav bg / Nav foreground | invariant fixed dark surface for brand-asset-bearing nav chrome (`221 15% 24%` / `0 0% 100%` neutral default) |
 | Typeface | Saira |
 | Radius | `0` (Metro flat) |
 | Labels | uppercase, tracked |
