@@ -4,7 +4,9 @@
 Starter Kit v3 build — hardening a fresh v2 clone via the `starter-kit-cleaner` skill.
 
 ## Last action
-2026-06-25 — Proxy convention + security audit CLOSED (read-only, no changes). Repo already on the Next 16 `proxy.ts` convention (`src/proxy.ts` exports `proxy`); installed Next = 16.2.6 = the exact patched release for the May 2026 middleware/proxy security advisories. Nothing to migrate, nothing to upgrade.
+2026-06-26 — **GATE 1 COMPLETE** (Kit Perfection campaign, branch `kit-hardening`; `main` untouched at `c3692d5`). Low-risk cleanup sweep verified green: true cold build EXIT 0, 81/81 tests, numbered-color grep = 0.
+
+(Prior) 2026-06-25 — Proxy convention + security audit CLOSED; recon report written at `agent_docs/RECON/RECON_starter-kit-v3_kit-hardening_2026-06-26.md` (this is the campaign's ground truth).
 
 (Prior) Phase 8 COMPLETE — v3 verified clean. All five grep gates ZERO. Superadmin intact. Verification triad from cold: tsc EXIT 0; npm test 11 suites / 81/81; cold `npm run build` with NO `.env.local` clean.
 
@@ -22,8 +24,15 @@ None.
 - KIP-1 parked: modernize `supabase/server.ts` cookies to `getAll/setAll` (drops the `any`) — own task.
 - **Proxy item CLOSED (read-only audit, no changes):** already on `src/proxy.ts` (new Next 16 convention, exports `proxy`); `src/utils/supabase/middleware.ts` is the SSR utility (keeps its name). Installed Next **16.2.6** = patched release for the May 2026 middleware/proxy CVEs (GHSA-267c/-26hh/-36qx/-492v). No `proxyDir` needed; kit doesn't use proxy for authz (uses `protectPage` in layouts). Nothing to migrate/upgrade.
 
+### 2026-06-26 — Kit Perfection campaign (branch `kit-hardening`, main untouched)
+Ground truth = recon report `agent_docs/RECON/RECON_starter-kit-v3_kit-hardening_2026-06-26.md`.
+- Pre-step `c3b46f8`: doctrine reshuffle + recon report + `_SKILLS/` working-tree save (pristine tree).
+- **GATE 1 COMPLETE** — 3 commits: `ccbd576` delete 3 orphan components (DashboardCard/MemberEventList/AdminBookingList — 0 importers/0 tests, empty dirs removed; zeroed the kit's numbered-color count) · `4c1b7bd` correct false "smart trigger reads role from user_metadata" claim in superadmin test README (doc-only; reality: trigger hardcodes 'member', role set via 2nd-step user_roles update) · `c36e806` tsconfig exclude `_SKILLS/**`.
+- Verified: true cold build EXIT 0 (`/` ○ static, 18 routes) · 81/81 tests · numbered-color grep = 0 (only allowed `dialog.tsx:24 bg-black/80` modal scrim).
+- Flags: `.env.local` now present in repo root (appeared post-recon — recon/prior close-outs assumed no-env tree); `_SKILLS/` (41 files) committed in pre-step to reach pristine tree (split/gitignore on branch if undesired).
+
 ## Next step
-Active effort: **hardening v3 as the generic base kit** that future projects build on (pivoted from the old "v3 is closed / clones-only" framing). Lint kit DONE; proxy item CLOSED. No task in flight — awaiting next hardening item from Tony. KIP-1 (server.ts `getAll/setAll`) available to pick up when wanted.
+**Awaiting Gate 2 instructions** (operator verifies Gate 1 first). Open recon-sourced candidates for later gates: the mobile-menu / Gate-M fix (Sheet vs port AppShellPage; wide 25rem rail → slide-over below `lg`); metadata key mismatch (`name` vs `full_name` at user creation — possible real bug); dual superadmin user-creation paths (API route vs server action); Stripe installed-but-unused; 18 moderate npm-audit vulns. KIP-1 (server.ts `getAll/setAll`) still parked.
 
 ## Invariants (do not violate)
 - KEEP superadmin (three-tier RBAC).
