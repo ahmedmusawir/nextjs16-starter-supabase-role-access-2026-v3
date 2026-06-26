@@ -45,7 +45,7 @@ const AdminPortalPageContent = async ({ page }: Props) => {
         </div>
       ) : (
         <>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-6">
+          <div className="grid grid-cols-1 xl:grid-cols-2 gap-4 mb-6">
             {users.map((user) => (
               <Card key={user.id} className="flex flex-col justify-between">
                 <CardHeader className="pb-2">

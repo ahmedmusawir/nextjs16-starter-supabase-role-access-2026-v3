@@ -1,6 +1,6 @@
 /**
- * AppShellPage — full-bleed app surface: a persistent sidebar (>= lg) + main column,
- * with a built-in mobile slide-over drawer (< lg) for the sidebar. This is the CLEAN
+ * AppShellPage — full-bleed app surface: a persistent sidebar (>= xl) + main column,
+ * with a built-in mobile slide-over drawer (< xl) for the sidebar. This is the CLEAN
  * reusable primitive the COMPONENT_REGISTRY always promised — promoted UP into the kit
  * (Cyber Pharma solved this ad-hoc several times and never extracted it). Blessed
  * reference version.
@@ -20,9 +20,10 @@
  *      under the shared global Navbar; main content full-width below; the sidebar
  *      lives in a left Sheet (<= 85vw) opened by the hamburger; outside-tap / Esc /
  *      nav all dismiss it.
- *   4. 768: unchanged from 375 — a 25rem rail does not fit at md, so it stays a
- *      slide-over. 1024 (lg): sidebar becomes persistent (w-[25rem], border-r); the
- *      mobile bar + drawer are hidden; main takes the remainder.
+ *   4. 768/1024: unchanged from 375 — the 25rem rail does not fit through the
+ *      tablet/laptop range, so it stays a slide-over (single-column content).
+ *      1280 (xl): sidebar becomes persistent (w-[25rem], border-r); the mobile bar
+ *      + drawer are hidden; main takes the remainder (multi-column content fits).
  *   Touch targets: hamburger h-11 w-11 (44px). Tokens: --nav-bg / --nav-foreground.
  *
  * CP scars inherited (fixed across several AuthedShell rounds — do not rediscover):
@@ -68,8 +69,8 @@ export default function AppShellPage({
 
   return (
     <div className="flex flex-1 flex-col">
-      {/* Mobile trigger bar (< lg). Two-bar pattern: sits under the shared Navbar. */}
-      <div className="flex items-center gap-3 bg-nav-bg px-4 py-2 text-nav-foreground lg:hidden">
+      {/* Mobile trigger bar (< xl). Two-bar pattern: sits under the shared Navbar. */}
+      <div className="flex items-center gap-3 bg-nav-bg px-4 py-2 text-nav-foreground xl:hidden">
         <button
           type="button"
           onClick={() => setOpen(true)}
@@ -83,12 +84,12 @@ export default function AppShellPage({
       </div>
 
       <div className="flex flex-1">
-        {/* Persistent sidebar (>= lg) */}
-        <aside className="hidden w-[25rem] flex-shrink-0 border-r border-border lg:block">
+        {/* Persistent sidebar (>= xl) */}
+        <aside className="hidden w-[25rem] flex-shrink-0 border-r border-border xl:block">
           {renderSidebar()}
         </aside>
 
-        {/* Mobile slide-over drawer (< lg) */}
+        {/* Mobile slide-over drawer (< xl) */}
         <Sheet open={open} onOpenChange={setOpen}>
           {/* CP scar #3 (~25rem, capped to 85vw) + #4 (native outside-tap/Esc, not prevented) */}
           <SheetContent side="left" className="w-[25rem] max-w-[85vw] p-0">
