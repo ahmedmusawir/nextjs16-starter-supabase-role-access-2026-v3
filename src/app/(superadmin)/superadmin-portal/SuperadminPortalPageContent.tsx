@@ -49,7 +49,7 @@ const SuperadminPortalPageContent = async ({ page }: Props) => {
       {users.length === 0 ? (
         <p className="text-muted-foreground">No users found.</p>
       ) : (
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+        <div className="grid grid-cols-1 xl:grid-cols-2 gap-4">
           {users.map((user) => (
             <Card key={user.id} className="flex flex-col justify-between">
               <CardHeader className="pb-2">
