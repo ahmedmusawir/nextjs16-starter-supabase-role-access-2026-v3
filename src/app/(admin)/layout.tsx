@@ -1,6 +1,7 @@
 import { ReactNode } from "react";
 import Navbar from "@/components/global/Navbar";
 import AdminSidebar from "@/components/layout/AdminSidebar";
+import AppShellPage from "@/components/common/AppShellPage";
 import { protectPage } from "@/utils/supabase/actions";
 import { AppRole } from "@/utils/app-role";
 
@@ -11,15 +12,15 @@ interface LayoutProps {
 export default async function AdminLayout({ children }: LayoutProps) {
   await protectPage([AppRole.ADMIN]);
 
+  // Gate-M fix: the 25rem rail is persistent >= lg and a hamburger-triggered
+  // slide-over < lg (was `hidden md:block` with no trigger). Navbar (shared)
+  // stays the top bar on all sizes; AppShellPage adds the mobile trigger below it.
   return (
-    <div className="flex flex-col min-h-screen">
+    <div className="flex min-h-screen flex-col">
       <Navbar />
-      <section className="flex flex-1">
-        <div className="hidden md:block h-auto flex-shrink-0 border-4 w-[25rem]">
-          <AdminSidebar />
-        </div>
-        <div className="flex-grow">{children}</div>
-      </section>
+      <AppShellPage sidebar={<AdminSidebar />} mobileTitle="Admin Portal">
+        {children}
+      </AppShellPage>
     </div>
   );
 }
