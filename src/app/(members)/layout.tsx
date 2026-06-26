@@ -1,6 +1,7 @@
 import { ReactNode } from "react";
 import Navbar from "@/components/global/Navbar";
 import Sidebar from "@/components/layout/Sidebar";
+import AppShellPage from "@/components/common/AppShellPage";
 import { protectPage } from "@/utils/supabase/actions";
 import { AppRole } from "@/utils/app-role";
 
@@ -11,15 +12,14 @@ interface LayoutProps {
 export default async function MemberLayout({ children }: LayoutProps) {
   await protectPage([AppRole.MEMBER]);
 
+  // Gate-M fix (matches (admin)): 25rem rail persistent >= xl, hamburger slide-over
+  // < xl. Navbar (shared) + protectPage unchanged.
   return (
-    <div className="flex flex-col min-h-screen">
+    <div className="flex min-h-screen flex-col">
       <Navbar />
-      <section className="flex flex-1">
-        <div className="hidden md:block h-auto flex-shrink-0 border-4 w-[25rem]">
-          <Sidebar />
-        </div>
-        <div className="flex-grow">{children}</div>
-      </section>
+      <AppShellPage sidebar={<Sidebar />} mobileTitle="Members Portal">
+        {children}
+      </AppShellPage>
     </div>
   );
 }
