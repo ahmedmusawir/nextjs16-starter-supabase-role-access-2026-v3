@@ -28,19 +28,19 @@ const PublicNav = () => {
       <nav className="order-3 lg:order-2 w-full lg:w-auto flex justify-center gap-1">
         <Link
           href="/members-portal"
-          className="px-3 py-2 text-sm font-medium rounded-md hover:bg-nav-foreground/10"
+          className="px-3 py-2 text-sm font-medium rounded-md hover:bg-nav-foreground/10 inline-flex items-center pointer-coarse:min-h-11"
         >
           Member Portal
         </Link>
         <Link
           href="/admin-portal"
-          className="px-3 py-2 text-sm font-medium rounded-md hover:bg-nav-foreground/10"
+          className="px-3 py-2 text-sm font-medium rounded-md hover:bg-nav-foreground/10 inline-flex items-center pointer-coarse:min-h-11"
         >
           Admin Portal
         </Link>
         <Link
           href="/superadmin-portal"
-          className="px-3 py-2 text-sm font-medium rounded-md hover:bg-nav-foreground/10"
+          className="px-3 py-2 text-sm font-medium rounded-md hover:bg-nav-foreground/10 inline-flex items-center pointer-coarse:min-h-11"
         >
           Super Admin Portal
         </Link>

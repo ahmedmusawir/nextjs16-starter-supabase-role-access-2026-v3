@@ -19,7 +19,14 @@ export function useLogoutHandler() {
 
 const Logout = () => {
   const handleLogout = useLogoutHandler();
-  return <DropdownMenuItem onSelect={handleLogout}>Logout</DropdownMenuItem>;
+  return (
+    <DropdownMenuItem
+      onSelect={handleLogout}
+      className="pointer-coarse:min-h-11"
+    >
+      Logout
+    </DropdownMenuItem>
+  );
 };
 
 export default Logout;

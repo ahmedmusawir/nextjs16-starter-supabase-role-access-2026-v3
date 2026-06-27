@@ -70,7 +70,7 @@ const Navbar = () => {
 
             {user && (
               <DropdownMenu>
-                <DropdownMenuTrigger className="cursor-pointer">
+                <DropdownMenuTrigger className="cursor-pointer inline-flex items-center justify-center pointer-coarse:min-h-11 pointer-coarse:min-w-11">
                   <Avatar>
                     <AvatarFallback>{user.email?.[0]?.toUpperCase() ?? "U"}</AvatarFallback>
                   </Avatar>
@@ -78,7 +78,7 @@ const Navbar = () => {
                 <DropdownMenuContent className="bg-popover text-popover-foreground">
                   <DropdownMenuLabel>My Account</DropdownMenuLabel>
                   <DropdownMenuSeparator />
-                  <DropdownMenuItem>
+                  <DropdownMenuItem className="pointer-coarse:min-h-11">
                     <Link href="/profile">Profile</Link>
                   </DropdownMenuItem>
                   <Logout />
