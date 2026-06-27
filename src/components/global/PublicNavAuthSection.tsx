@@ -26,10 +26,13 @@ import {
 import Logout from "../auth/Logout";
 import { User as SupabaseUser } from "@supabase/supabase-js";
 import { createClient } from "@/utils/supabase/client";
+import { useAuthStore } from "@/store/useAuthStore";
 
 const PublicNavAuthSection = () => {
   const [user, setUser] = useState<SupabaseUser | null>(null);
   const [isLoading, setIsLoading] = useState(true);
+  // Hide Profile for superadmins (console-managed; /profile is gated [ADMIN, MEMBER]).
+  const isSuperadmin = useAuthStore((s) => s.isSuperadmin);
 
   useEffect(() => {
     // N4: create the Supabase client inside the effect so this component is
@@ -71,9 +74,11 @@ const PublicNavAuthSection = () => {
           <DropdownMenuContent className="bg-popover text-popover-foreground">
             <DropdownMenuLabel>My Account</DropdownMenuLabel>
             <DropdownMenuSeparator />
-            <DropdownMenuItem className="coarse:min-h-11">
-              <Link href="/profile">Profile</Link>
-            </DropdownMenuItem>
+            {!isSuperadmin && (
+              <DropdownMenuItem className="coarse:min-h-11">
+                <Link href="/profile">Profile</Link>
+              </DropdownMenuItem>
+            )}
             <Logout />
           </DropdownMenuContent>
         </DropdownMenu>

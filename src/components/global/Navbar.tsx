@@ -27,10 +27,13 @@ import ThemeToggle from "./ThemeToggle";
 import Logout from "../auth/Logout";
 import { User as SupabaseUser } from "@supabase/auth-js";
 import { createClient } from "@/utils/supabase/client";
+import { useAuthStore } from "@/store/useAuthStore";
 
 const Navbar = () => {
   const [user, setUser] = useState<SupabaseUser | null>(null);
   const [isLoading, setIsLoading] = useState(true);
+  // Hide Profile for superadmins (console-managed; /profile is gated [ADMIN, MEMBER]).
+  const isSuperadmin = useAuthStore((s) => s.isSuperadmin);
 
   useEffect(() => {
     // N4: createClient inside the effect so this is prerender-safe.
@@ -78,9 +81,11 @@ const Navbar = () => {
                 <DropdownMenuContent className="bg-popover text-popover-foreground">
                   <DropdownMenuLabel>My Account</DropdownMenuLabel>
                   <DropdownMenuSeparator />
-                  <DropdownMenuItem className="coarse:min-h-11">
-                    <Link href="/profile">Profile</Link>
-                  </DropdownMenuItem>
+                  {!isSuperadmin && (
+                    <DropdownMenuItem className="coarse:min-h-11">
+                      <Link href="/profile">Profile</Link>
+                    </DropdownMenuItem>
+                  )}
                   <Logout />
                 </DropdownMenuContent>
               </DropdownMenu>
