@@ -22,7 +22,7 @@ const Logout = () => {
   return (
     <DropdownMenuItem
       onSelect={handleLogout}
-      className="pointer-coarse:min-h-11"
+      className="coarse:min-h-11"
     >
       Logout
     </DropdownMenuItem>

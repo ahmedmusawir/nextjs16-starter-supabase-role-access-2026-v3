@@ -3,6 +3,7 @@ import typography from "@tailwindcss/typography";
 import aspectRatio from "@tailwindcss/aspect-ratio";
 import gridAutoFit from "@shrutibalasa/tailwind-grid-auto-fit";
 import animate from "tailwindcss-animate";
+import plugin from "tailwindcss/plugin";
 
 const config = {
   darkMode: ["class"],
@@ -109,7 +110,18 @@ const config = {
       },
     },
   },
-  plugins: [typography, aspectRatio, gridAutoFit, animate],
+  plugins: [
+    typography,
+    aspectRatio,
+    gridAutoFit,
+    animate,
+    // Touch-only tap-target floor: `coarse:` = @media (pointer: coarse). Engages
+    // on touch pointers ONLY, so mouse/desktop button density is never raised.
+    // (Tailwind 3.4 has no built-in pointer variant — this registers it.)
+    plugin(({ addVariant }) => {
+      addVariant("coarse", "@media (pointer: coarse)");
+    }),
+  ],
 } satisfies Config;
 
 export default config;

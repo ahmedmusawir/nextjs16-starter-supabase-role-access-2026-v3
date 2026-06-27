@@ -5,9 +5,9 @@ import { cva, type VariantProps } from "class-variance-authority";
 import { cn } from "@/lib/utils";
 
 const buttonVariants = cva(
-  // `pointer-coarse:min-h-11` = touch-only 44px tap floor: engages on coarse
+  // `coarse:min-h-11` = touch-only 44px tap floor: engages on coarse
   // (touch) pointers ONLY, so mouse/desktop button density is unchanged.
-  "inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 pointer-coarse:min-h-11",
+  "inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 coarse:min-h-11",
   {
     variants: {
       variant: {
@@ -26,7 +26,7 @@ const buttonVariants = cva(
         sm: "h-9 rounded-md px-3",
         lg: "h-14 rounded-md px-12",
         xl: "h-16 rounded-md px-24",
-        icon: "h-10 w-10 pointer-coarse:min-w-11",
+        icon: "h-10 w-10 coarse:min-w-11",
       },
     },
     defaultVariants: {

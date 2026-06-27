@@ -63,7 +63,7 @@ const PublicNavAuthSection = () => {
       <>
         <span className="mr-3 text-sm hidden md:inline">{user.email}</span>
         <DropdownMenu>
-          <DropdownMenuTrigger className="cursor-pointer inline-flex items-center justify-center pointer-coarse:min-h-11 pointer-coarse:min-w-11">
+          <DropdownMenuTrigger className="cursor-pointer inline-flex items-center justify-center coarse:min-h-11 coarse:min-w-11">
             <Avatar>
               <AvatarFallback>{user.email?.[0]?.toUpperCase() ?? "U"}</AvatarFallback>
             </Avatar>
@@ -71,7 +71,7 @@ const PublicNavAuthSection = () => {
           <DropdownMenuContent className="bg-popover text-popover-foreground">
             <DropdownMenuLabel>My Account</DropdownMenuLabel>
             <DropdownMenuSeparator />
-            <DropdownMenuItem className="pointer-coarse:min-h-11">
+            <DropdownMenuItem className="coarse:min-h-11">
               <Link href="/profile">Profile</Link>
             </DropdownMenuItem>
             <Logout />
@@ -84,7 +84,7 @@ const PublicNavAuthSection = () => {
   return (
     <Link
       href="/auth"
-      className="ml-3 text-sm font-medium hover:underline inline-flex items-center pointer-coarse:min-h-11"
+      className="ml-3 text-sm font-medium hover:underline inline-flex items-center coarse:min-h-11"
     >
       Login
     </Link>
