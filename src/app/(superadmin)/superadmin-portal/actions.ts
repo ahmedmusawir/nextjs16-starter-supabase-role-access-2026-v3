@@ -153,8 +153,9 @@ export async function addUser(formData: {
     return { error: error.message };
   }
 
-  // The smart trigger reads 'role' and 'full_name' from metadata and inserts
-  // into both user_roles and profiles automatically — no manual inserts needed.
+  // NOTE: the trigger hard-codes role='member' and reads 'name' (not 'full_name').
+  // The role/full_name in user_metadata here are NOT applied at creation — the new
+  // user lands as a member with a NULL full_name. See KNOWN_ISSUES.md (both bugs).
 
   revalidatePath("/superadmin-portal");
   return {};
