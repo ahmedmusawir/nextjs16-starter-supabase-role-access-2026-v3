@@ -49,3 +49,25 @@ it.
 **Prescribed fix (real-project time):** either the trigger reads + applies the
 metadata role, OR each live creation path does a `user_roles` second-step update
 after `createUser`. Decide with the real RBAC model.
+
+**Reference 2nd-step role pattern** — this was implemented in the now-removed fossil
+route `/api/auth/superadmin-add-user` (deleted in Gate 6). Preserved here for
+admin/member assignment IF a real project wants app-side role-setting:
+
+```js
+// After createUser: update the auto-created user_roles row to the requested role.
+const newUserId = data.user?.id;
+if (!newUserId) { /* handle: user created but ID missing */ }
+
+const { error: roleUpdateError } = await adminClient
+  .from("user_roles")
+  .update({ role })
+  .eq("user_id", newUserId);
+// handle roleUpdateError: "user created but role update failed"
+```
+
+> **NOTE — superadmin creation is CONSOLE-ONLY by kit doctrine.** Never re-add an
+> app-side superadmin-creation route (it's a privilege-escalation surface). This
+> snippet is for the **lower-role (admin/member)** pattern only. A superadmin-created
+> user landing as `member` is acceptable in this model — promotion to superadmin
+> happens in the Supabase console, not the app.
