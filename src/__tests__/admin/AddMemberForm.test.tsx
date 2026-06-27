@@ -64,6 +64,14 @@ describe('AddMemberForm', () => {
     await waitFor(() => {
       expect(submitButton).toBeDisabled();
     });
+
+    // Drain the pending submit so its mocked addMember promise resolves (and its
+    // success redirect fires) WITHIN this test. Otherwise the still-pending handler
+    // resolves during a LATER test and leaks a router.push into it — that was the
+    // intermittent failure of "does not redirect when addMember returns an error".
+    await waitFor(() => {
+      expect(mockPush).toHaveBeenCalledWith('/admin-portal');
+    });
   });
 
   it('validates that passwords match before submission', async () => {
@@ -147,6 +155,15 @@ describe('AddMemberForm', () => {
 
     await waitFor(() => {
       expect(addMemberMock).toHaveBeenCalled();
+    });
+
+    // Wait for the async handler to FULLY settle (loading resets, the button label
+    // returns to "Create Member") so the redirect decision has definitively run
+    // before asserting it did NOT redirect — no racing the negative assertion.
+    await waitFor(() => {
+      expect(
+        screen.getByRole('button', { name: /create member/i })
+      ).toBeEnabled();
     });
 
     expect(mockPush).not.toHaveBeenCalled();
