@@ -3,7 +3,7 @@ import { createServerClient, type CookieOptions } from '@supabase/ssr'
 import { cookies } from 'next/headers'
 
 export const createClient = async () => {
-  const cookieStore = (await cookies()) as any
+  const cookieStore = await cookies()
   const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || ""
   const secure = siteUrl.startsWith("https://")
 
@@ -12,33 +12,25 @@ export const createClient = async () => {
     process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY!,
     {
       cookies: {
-        get(name: string) {
-          return cookieStore.get(name)?.value
+        getAll() {
+          return cookieStore.getAll()
         },
-        set(name: string, value: string, options: CookieOptions) {
+        setAll(cookiesToSet: { name: string; value: string; options: CookieOptions }[]) {
           try {
-            // Ensure proper cookie security settings for production
-            const cookieOptions = {
-              ...options,
-              secure,
-              sameSite: 'lax' as const,
-              httpOnly: false, // Supabase needs client access
-            }
-            cookieStore.set({ name, value, ...cookieOptions })
+            // Preserve the kit's cookie security flags (secure / sameSite / httpOnly)
+            // while modernizing the mechanism to getAll/setAll. httpOnly:false is a
+            // deliberate choice — Supabase needs client-side access to the session.
+            cookiesToSet.forEach(({ name, value, options }) =>
+              cookieStore.set(name, value, {
+                ...options,
+                secure,
+                sameSite: 'lax',
+                httpOnly: false,
+              })
+            )
           } catch {
-            // The `set` method was called from a Server Component.
-          }
-        },
-        remove(name: string, options: CookieOptions) {
-          try {
-            const cookieOptions = {
-              ...options,
-              secure,
-              sameSite: 'lax' as const,
-            }
-            cookieStore.delete({ name, ...cookieOptions })
-          } catch {
-            // The `delete` method was called from a Server Component.
+            // setAll was called from a Server Component — ignored; updateSession
+            // (proxy/middleware) refreshes the session cookies on the next request.
           }
         },
       },
