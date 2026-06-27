@@ -1,3 +1,13 @@
+/**
+ * Spinner — inline loading indicator (w-8 h-8), role="status" with an sr-only label.
+ *
+ * Pre-Write Check:
+ *   1. Primitives: inline SVG.
+ *   2. Manual ref: COMPONENT_REGISTRY (Spinner).
+ *   3. 375 sketch: a centered small spinner with vertical margin (my-5).
+ *   4. 768/1024: identical at every width.
+ *   Touch targets: N/A (non-interactive).
+ */
 import React from "react";
 
 function Spinner() {

@@ -1,3 +1,16 @@
+/**
+ * PaginationControls — Prev / "Page X of Y" / Next pager. Client; uses useTransition
+ * so navigation is non-blocking (Loader2 shows while pending).
+ *
+ * Pre-Write Check:
+ *   1. Primitives: Button (outline, sm), lucide Loader2; next/navigation router.
+ *   2. Manual ref: COMPONENT_REGISTRY (PaginationControls).
+ *   3. 375 sketch: a single centered row — Prev / status / Next; the end buttons
+ *      hide when there is no prev/next page.
+ *   4. 768/1024: identical (centered row at every width).
+ *   Touch targets: Prev/Next are size="sm" (h-9/36px) -> raised to 44px on touch by
+ *      the Gate-4 Button floor.
+ */
 "use client";
 
 import { useRouter } from "next/navigation";

@@ -1,3 +1,15 @@
+/**
+ * Navbar — authenticated portal top bar (logo + theme + account). Client island;
+ * reads the Supabase user via createClient() inside an effect (prerender-safe, N4).
+ *
+ * Pre-Write Check:
+ *   1. Primitives: Avatar, DropdownMenu, ThemeToggle, Logout (+ supabase client).
+ *   2. Manual ref: COMPONENT_REGISTRY (Navbar); UI-UX Rule Zero.
+ *   3. 375 sketch: full-width nav-token bar — logo left; theme + avatar-dropdown
+ *      (or a Login link) right. The email label is hidden < md.
+ *   4. 768+: the email label appears (hidden md:inline); layout otherwise unchanged.
+ *   Touch targets: avatar trigger + theme button meet 44px on touch (Gate-4 floor).
+ */
 "use client";
 
 import { useEffect, useState } from "react";

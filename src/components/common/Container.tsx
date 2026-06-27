@@ -1,3 +1,14 @@
+/**
+ * Container — nested-section wrapper (like Page, for sub-sections). FULL=true ->
+ * full-bleed; FULL=false -> w-11/12, narrowing to w-4/5 at xl.
+ *
+ * Pre-Write Check:
+ *   1. Primitives: raw <section>.
+ *   2. Manual ref: COMPONENT_REGISTRY (Container).
+ *   3. 375 sketch: a centered 11/12-width section (non-full).
+ *   4. 1280 (xl): narrows to w-4/5; below xl it stays 11/12.
+ *   Touch targets: N/A (non-interactive layout wrapper).
+ */
 import { ReactNode } from "react";
 
 interface Props {

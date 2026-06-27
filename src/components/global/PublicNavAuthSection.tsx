@@ -1,3 +1,15 @@
+/**
+ * PublicNavAuthSection — auth-state island for the public nav. Client; reads the
+ * Supabase user via createClient() in an effect (prerender-safe, N4).
+ *
+ * Pre-Write Check:
+ *   1. Primitives: Avatar, DropdownMenu, Logout (+ supabase client).
+ *   2. Manual ref: COMPONENT_REGISTRY; recon Q11.3 (public routes show auth state).
+ *   3. 375 sketch: logged-in -> avatar dropdown (Profile / Logout); logged-out -> a
+ *      Login link. Stays top-level (outside any hamburger) at every width.
+ *   4. 768+: the email label appears next to the avatar (hidden md:inline).
+ *   Touch targets: avatar trigger + Login link meet 44px on touch (Gate-4 floor).
+ */
 "use client";
 
 import { useEffect, useState } from "react";

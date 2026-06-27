@@ -1,3 +1,15 @@
+/**
+ * SuperadminSidebar — superadmin portal navigation (command palette: Dashboard,
+ * Add User).
+ *
+ * Pre-Write Check:
+ *   1. Primitives: Command (cmdk); next/link.
+ *   2. Manual ref: COMPONENT_REGISTRY (SuperadminSidebar); FFM 13.1 Gate M.
+ *   3. 375 sketch: rendered inside AppShellPage's mobile drawer (left Sheet) — a
+ *      full-height searchable command list.
+ *   4. >= xl (1280): becomes the persistent 25rem rail.
+ *   Touch targets: CommandItem rows are list-height tap targets.
+ */
 import React from "react";
 import {
   Command,

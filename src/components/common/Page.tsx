@@ -1,3 +1,15 @@
+/**
+ * Page — content-flow page wrapper. FULL=true -> full-bleed; FULL=false -> w-11/12
+ * centered. Optional customYMargin (default my-10). Not for app shells (use AppShellPage).
+ *
+ * Pre-Write Check:
+ *   1. Primitives: raw <section> (layout primitive; pairs with Row/Box).
+ *   2. Manual ref: COMPONENT_REGISTRY (Page); UI-UX Page Building Pattern.
+ *   3. 375 sketch: a single centered column at 11/12 width (or full-bleed), my-10.
+ *   4. 768/1024: width holds at 11/12 (the xl:w-4/5 step is currently commented out);
+ *      the caller adds responsive grids/flex inside.
+ *   Touch targets: N/A (non-interactive layout wrapper).
+ */
 import { ReactNode } from "react";
 
 interface Props {

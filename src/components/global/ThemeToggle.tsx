@@ -1,3 +1,14 @@
+/**
+ * ThemeToggle — light/dark/system switcher (next-themes), shown in every navbar.
+ *
+ * Pre-Write Check:
+ *   1. Primitives: Button (ghost), DropdownMenu, next-themes useTheme; lucide Sun/Moon.
+ *   2. Manual ref: COMPONENT_REGISTRY (ThemeToggle); THEMING_MANUAL.
+ *   3. 375 sketch: a single icon button in the nav bar; tapping opens a small
+ *      end-aligned menu (Light / Dark / System).
+ *   4. 768/1024: identical (icon button + menu at every width).
+ *   Touch targets: the icon button meets 44px on touch (Gate-4 inline fix).
+ */
 "use client";
 
 import * as React from "react";

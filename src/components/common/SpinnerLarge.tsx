@@ -1,3 +1,14 @@
+/**
+ * SpinnerLarge — full-page loading indicator (150x150), role="status". Used by the
+ * portal route loading.tsx files.
+ *
+ * Pre-Write Check:
+ *   1. Primitives: inline SVG.
+ *   2. Manual ref: COMPONENT_REGISTRY (Spinner).
+ *   3. 375 sketch: a single large centered spinner.
+ *   4. 768/1024: identical at every width.
+ *   Touch targets: N/A (non-interactive).
+ */
 import React from "react";
 
 function SpinnerLarge() {

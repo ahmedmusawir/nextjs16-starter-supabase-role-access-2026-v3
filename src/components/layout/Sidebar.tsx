@@ -1,3 +1,14 @@
+/**
+ * Sidebar — member portal navigation (command palette: search + Dashboard + Profile).
+ *
+ * Pre-Write Check:
+ *   1. Primitives: Command (cmdk) — CommandInput/List/Group/Item; next/link.
+ *   2. Manual ref: COMPONENT_REGISTRY (Sidebar); FFM 13.1 Gate M.
+ *   3. 375 sketch: rendered inside AppShellPage's mobile drawer (left Sheet) — a
+ *      full-height searchable command list, one tap per destination.
+ *   4. >= xl (1280): the same list becomes the persistent 25rem rail.
+ *   Touch targets: CommandItem rows are list-height tap targets.
+ */
 import React from "react";
 import {
   Command,
