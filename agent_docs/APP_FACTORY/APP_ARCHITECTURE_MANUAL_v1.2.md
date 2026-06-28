@@ -3,8 +3,8 @@
 > **Stark Industries Software Factory**
 > *The definitive guide to building scalable Next.js 15 applications with the App Router.*
 
-**Version:** 1.1
-**Last Updated:** May 31, 2026
+**Version:** 1.2
+**Last Updated:** June 28, 2026
 **Born from:** Cyberize Run 001 — Lesson 7 (page composition) + Lesson 8 (server/client boundary)
 
 ---
@@ -1409,8 +1409,8 @@ Co-location keeps page-specific code with the page that owns it:
 
 The canonical worked example of this pattern is at:
 
-- `src/app/(public)/demo/page.tsx` (3-line wrapper)
-- `src/app/(public)/demo/DemoPageContent.tsx` (actual content)
+- `src/app/(admin)/admin-portal/page.tsx` (thin wrapper)
+- `src/app/(admin)/admin-portal/AdminPortalPageContent.tsx` (actual content)
 
 ---
 
@@ -1487,6 +1487,7 @@ When designing utility modules:
 
 | Version | Date | Changes |
 |---|---|---|
+| 1.2 | 2026-06-28 | Re-pointed the §11 co-location Reference Example from the deleted `/demo` route to the live `(admin)/admin-portal` page+content pair (preserve lesson, swap actor). Kit Hardening Gate 10. |
 | 1.1 | 2026-05-31 | Added Section 11 (Page Composition Pattern), Section 12 (Server/Client Boundary). Born from Cyberize Run 001 Lessons 7, 8. Fixed UTF-8 encoding artifacts. |
 | 1.0 | (original) | Initial manual |
 
@@ -1494,4 +1495,4 @@ When designing utility modules:
 
 *This manual is part of the Stark Industries Software Factory documentation suite.*
 
-🥄 *App Factory v1.1 doctrine.*
+🥄 *App Factory v1.2 doctrine.*

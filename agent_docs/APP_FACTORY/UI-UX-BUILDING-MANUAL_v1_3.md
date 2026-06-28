@@ -838,111 +838,88 @@ members-portal/
 
 ## Complete Page Examples
 
-### Example 1: Admin Portal Page
+### Example 1: Content-Flow Page (Public Home)
 
-**File:** `src/app/(admin)/admin-portal/page.tsx`
+**File:** `src/app/(public)/page.tsx` — the kit's real marketing home, a content-flow
+page built from `Page` + `Row` + `Box` (live on disk; excerpt below).
+
 ```tsx
-import AdminPortalPageContent from "./AdminPortalPageContent";
-
-const AdminPortal = () => {
-  return <AdminPortalPageContent />;
-};
-
-export default AdminPortal;
-```
-
-**File:** `src/app/(admin)/admin-portal/AdminPortalPageContent.tsx`
-```tsx
-import AdminBookingList from "@/components/admin/AdminBookingList";
-import BackButton from "@/components/common/BackButton";
-import Page from "@/components/common/Page";
-import Row from "@/components/common/Row";
-import { Button } from "@/components/ui/button";
-import Head from "next/head";
 import Link from "next/link";
-import React from "react";
-
-const AdminPortalPageContent = () => {
-  return (
-    <>
-      <Head>
-        <title>Admin Portal</title>
-        <meta name="description" content="Admin portal dashboard" />
-      </Head>
-      
-      <Page className="" FULL={false}>
-        {/* Action button - floated right */}
-        <Link className="float-end" href="/admin-booking">
-          <Button className="bg-gray-700 hover:bg-gray-600 text-white">
-            Create Booking
-          </Button>
-        </Link>
-        
-        {/* Main content - prose styling for typography */}
-        <Row className="prose max-w-3xl mx-auto">
-          <h1 className="h1">Admin Portal</h1>
-          <h2 className="h2">Booked events list:</h2>
-          <AdminBookingList />
-        </Row>
-      </Page>
-    </>
-  );
-};
-
-export default AdminPortalPageContent;
-```
-
-**Key Patterns:**
-- Minimal `page.tsx` wrapper
-- SEO metadata in Head
-- Page with `FULL={false}` for centered layout
-- Float button for actions
-- Prose class for readable typography
-- Max-width for content readability
-
----
-
-### Example 2: Demo Page (Responsive Showcase)
-
-**File:** `src/app/(public)/demo/page.tsx`
-```tsx
-import DemoPageContent from "./DemoPageContent";
-
-const Home = () => {
-  return <DemoPageContent />;
-};
-
-export default Home;
-```
-
-**File:** `src/app/(public)/demo/DemoPageContent.tsx`
-```tsx
-import React from "react";
-import Head from "next/head";
 import Page from "@/components/common/Page";
 import Row from "@/components/common/Row";
 import Box from "@/components/common/Box";
 import { Button } from "@/components/ui/button";
 
-const Demo = () => {
+const HomePage = () => {
   return (
-    <>
-      <Head>
-        <title>Demo Page</title>
-        <meta name="description" content="UI component showcase" />
-      </Head>
+    <Page FULL={false} className="">
+      {/* Hero — content-flow split happens at lg (1024), not md */}
+      <Row className="text-center py-12 lg:py-24">
+        <h1 className="text-4xl lg:text-6xl font-bold tracking-tight">Your Product</h1>
+        <p className="mt-6 text-lg text-muted-foreground max-w-2xl mx-auto">
+          A neutral starter for what you&apos;re building next.
+        </p>
+        <div className="mt-8 flex flex-col lg:flex-row gap-3 justify-center items-center">
+          <Button asChild><Link href="/auth">Get started</Link></Button>
+          <Button asChild variant="outline">
+            <Link href="/members-portal">Explore the portals</Link>
+          </Button>
+        </div>
+      </Row>
+
+      {/* Feature grid — 1 col mobile, 3 cols at lg */}
+      <Row className="py-12 lg:py-16">
+        <div className="grid gap-6 grid-cols-1 lg:grid-cols-3">
+          <Box className="rounded-lg border border-border bg-card text-card-foreground p-6">
+            <h3 className="text-lg font-semibold mb-2">Role-based access</h3>
+            <p className="text-sm text-muted-foreground">Three-tier RBAC, wired end-to-end.</p>
+          </Box>
+          {/* …two more Box cards… */}
+        </div>
+      </Row>
+    </Page>
+  );
+};
+
+export default HomePage;
+```
+
+**Key Patterns:**
+- `Page FULL={false}` for a centered content-flow column; `Row` sections stack vertically; `Box` for bordered cards
+- **Token-driven colors only** (`text-muted-foreground`, `bg-card`, `border-border`) — no numbered Tailwind classes
+- Responsive at `lg` (the content-flow split point; see Rule Zero / §6)
+- App Router metadata via `export const metadata` — **NOT** `next/head` (that's Pages Router)
+
+---
+
+### Example 2: Responsive Composition Patterns (illustrative)
+
+These are illustrative `Page` / `Row` / `Box` composition patterns — flex-wrap cards,
+a responsive grid, and the auto-fit grid. They are **not a shipped route** (the kit's
+old `/demo` showcase was removed in the campaign); drop any of these `Row`s into a
+real `Page`.
+
+```tsx
+import Page from "@/components/common/Page";
+import Row from "@/components/common/Row";
+import Box from "@/components/common/Box";
+import { Button } from "@/components/ui/button";
+
+// Illustrative — compose these Rows into any Page:
+const ResponsivePatterns = () => {
+  return (
       
       <Page className="justify-center" FULL={false}>
         {/* Typography & Buttons Row */}
         <Row className="">
           <h1 className="h1">Main Heading</h1>
-          <Button className="bg-red-700 hover:bg-red-600 text-white" size="sm">
+          <Button size="sm">
             Small Button
           </Button>
-          <Button className="bg-red-700 hover:bg-red-600 text-white ml-3">
+          <Button className="ml-3">
             Default Button
           </Button>
-          <Button className="bg-red-700 hover:bg-red-600 text-white ml-3" size="lg">
+          <Button className="ml-3" size="lg">
             Large Button
           </Button>
           
@@ -1005,16 +982,15 @@ const Demo = () => {
           {/* More items */}
         </Row>
       </Page>
-    </>
   );
 };
 
-export default Demo;
+export default ResponsivePatterns;
 ```
 
 **Demonstrates:**
 - Typography hierarchy (h1, h2, h3, p)
-- Button variants and sizes
+- Button sizes (`sm` / default / `lg`) — token-themed, no numbered colors
 - Fixed-width flex cards (`w-80`)
 - Responsive grid (1-5 columns)
 - Auto-fit grid (plugin)

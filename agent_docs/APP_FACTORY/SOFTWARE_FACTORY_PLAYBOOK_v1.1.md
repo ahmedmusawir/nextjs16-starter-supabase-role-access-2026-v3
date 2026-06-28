@@ -112,7 +112,7 @@ This is true for human architects authoring docs and reading playbooks. It is ev
 | `FRONTEND_FIRST_PLAYBOOK_v1.1.md` | Cyberize Agentic Automation build (Run 001) |
 | `UI-UX-BUILDING-MANUAL_v1.1.md` | Cyberize screenshots in `_design/` + built screens |
 | `AUTH_MANUAL_v1.1.md` | Starter kit's working auth implementation |
-| `APP_ARCHITECTURE_MANUAL_v1.1.md` | Starter kit's actual folder structure + Run 001 module |
+| `APP_ARCHITECTURE_MANUAL_v1.2.md` | Starter kit's actual folder structure + Run 001 module |
 | `SOFTWARE_FACTORY_PLAYBOOK_v1.1.md` | The Cyberize Run 001 retrospective + all surviving doctrine |
 
 ### Discipline When Authoring New Playbooks

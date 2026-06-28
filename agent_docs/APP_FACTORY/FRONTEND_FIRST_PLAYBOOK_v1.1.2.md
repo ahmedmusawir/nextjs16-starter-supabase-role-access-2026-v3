@@ -1,7 +1,7 @@
 # FRONTEND_FIRST_PLAYBOOK.md
 
-**Version:** 1.1.1
-**Last Updated:** June 2, 2026
+**Version:** 1.1.2
+**Last Updated:** June 28, 2026
 **Born from:** Cyberize Run 001 lessons (Lesson 2 redundant authService, Lesson 4/7 component blindness, Lesson 7 page composition) + v1.1.1 correction (Lesson 9 — over-merged sections relocated to FRONTEND_BUILD_PHASE_PLAYBOOK)
 
 > **Purpose:**
@@ -368,8 +368,8 @@ src/app/(cyberize)/chat/ChatPageContent.tsx ← co-located with page.tsx
 ### Reference Example
 
 The canonical worked example of this pattern is at:
-- `src/app/(public)/demo/page.tsx` (3-line wrapper)
-- `src/app/(public)/demo/DemoPageContent.tsx` (actual content)
+- `src/app/(admin)/admin-portal/page.tsx` (thin wrapper)
+- `src/app/(admin)/admin-portal/AdminPortalPageContent.tsx` (actual content)
 
 ---
 
@@ -429,6 +429,7 @@ This split is also v1.1's first explicit application of the **Doctrine Pairing P
 
 | Version | Date | Changes |
 |---------|------|---------|
+| 1.1.2 | 2026-06-28 | Re-pointed the §12 co-location Reference Example from the deleted `/demo` route to the live `(admin)/admin-portal` page+content pair (preserve lesson, swap actor). Kit Hardening Gate 10. |
 | 1.1.1 | 2026-06-02 | Sections 14 and 15 trimmed to cross-references. Stage execution doctrine (Pre-Phase Doctrine Refresh, Kit Improvement Proposals) relocated to its proper home in FRONTEND_BUILD_PHASE_PLAYBOOK_v1.2.md. Doctrine de-duplication. Born from Lesson 9 (speculative authoring caught in v1.1 retrospective). |
 | 1.1 | 2026-05-31 | Added Section 0 (Kit Audit), Section 12 (Page Composition), Section 13 (Pre-Write Check), Section 14 (Phase Doctrine Refresh), Section 15 (Kit Improvement Proposals). Born from Cyberize Run 001 lessons 2, 4, 5, 7. Fixed UTF-8 encoding artifacts. |
 | 1.0 | 2026-01-01 | Initial playbook |

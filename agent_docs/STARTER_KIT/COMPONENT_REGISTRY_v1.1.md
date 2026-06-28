@@ -773,7 +773,7 @@ If you find yourself needing any of these, you've found a Kit Improvement Propos
 
 - **`STARTER_KIT_HANDBOOK.md`** — full kit overview (sibling file)
 - **`agent_docs/APP_FACTORY/UI-UX-BUILDING-MANUAL.md`** — full UI patterns deep-dive
-- **`src/app/(public)/demo/DemoPageContent.tsx`** — canonical page composition example
+- **`src/app/(public)/page.tsx`** — canonical page-composition example (live `Page`/`Row`/`Box` content-flow)
 - **`src/components/common/AppShellPage.tsx`** — heavy in-file JSDoc with decision tree
 
 ---
@@ -782,7 +782,7 @@ If you find yourself needing any of these, you've found a Kit Improvement Propos
 
 | Version | Date | Changes |
 |---|---|---|
-| 1.1 | 2026-06-28 | Kit-Perfection reconciliation: `AppShellPage` + `Sheet` are REAL (built Gates 2–3); breakpoint `md`→`xl`, two-bar + render-fn sidebar + 4 CP scars; removed non-existent `NavbarHome`/`NavbarSuperadmin`; added real global components (`PublicNav`/`PublicNavAuthSection`/`NavbarLoginReg`/`PublicMobileNav`). |
+| 1.1 | 2026-06-28 | Kit-Perfection reconciliation: `AppShellPage` + `Sheet` are REAL (built Gates 2–3); breakpoint `md`→`xl`, two-bar + render-fn sidebar + 4 CP scars; removed non-existent `NavbarHome`/`NavbarSuperadmin`; added real global components (`PublicNav`/`PublicNavAuthSection`/`NavbarLoginReg`/`PublicMobileNav`); re-pointed the page-composition cross-ref from the deleted `/demo` to the live home. |
 | 1.0 | 2026-05-31 | Initial registry authored from kit v0.4.1 + Run 001 lessons |
 
 ---
