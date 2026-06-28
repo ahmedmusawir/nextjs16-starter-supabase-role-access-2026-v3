@@ -74,12 +74,16 @@ CREATE POLICY "Users can update their own profile"
 
 
 -- -----------------------------------------------------------------------------
--- STEP 4: handle_new_user() trigger function
+-- STEP 4: handle_new_user() trigger function (Mark IV — smart trigger)
 -- -----------------------------------------------------------------------------
--- Fires on every INSERT into auth.users.
--- Automatically creates:
---   1. A row in public.user_roles  with default role = 'member'
---   2. A row in public.profiles    with email + full_name from user_metadata
+-- Fires on every INSERT into auth.users. Automatically creates:
+--   1. A row in public.user_roles  — role read from user_metadata 'role'
+--      (defaults to 'member' if absent).
+--   2. A row in public.profiles    — email + full_name read from user_metadata
+--      'full_name'.
+-- Reads the SAME keys the app writes (full_name + role), so writers and trigger
+-- agree: a requested role is honored at creation (no separate user_roles update
+-- needed) and full_name populates immediately. Idempotent (ON CONFLICT DO NOTHING).
 --
 -- IMPORTANT: Do NOT manually insert into user_roles or profiles when creating
 -- users via supabase.auth.admin.createUser(). This trigger handles it.
@@ -90,25 +94,39 @@ LANGUAGE plpgsql
 SECURITY DEFINER
 SET search_path = public
 AS $$
+DECLARE
+  assigned_role public.app_role;
 BEGIN
-  -- Insert default member role
-  INSERT INTO public.user_roles (user_id, role)
-  VALUES (NEW.id, 'member');
+  -- Use the metadata role if provided, otherwise default to 'member'
+  IF NEW.raw_user_meta_data ->> 'role' IS NOT NULL THEN
+    assigned_role := (NEW.raw_user_meta_data ->> 'role')::public.app_role;
+  ELSE
+    assigned_role := 'member'::public.app_role;
+  END IF;
 
-  -- Insert profile row with email and optional full_name from metadata
+  -- Insert role row (skip if one already exists)
+  INSERT INTO public.user_roles (user_id, role)
+  VALUES (NEW.id, assigned_role)
+  ON CONFLICT (user_id) DO NOTHING;
+
+  -- Insert profile row (reads full_name from metadata)
   INSERT INTO public.profiles (id, email, full_name)
   VALUES (
     NEW.id,
     NEW.email,
-    NEW.raw_user_meta_data ->> 'name'
-  );
+    NEW.raw_user_meta_data ->> 'full_name'
+  )
+  ON CONFLICT (id) DO NOTHING;
 
   RETURN NEW;
 END;
 $$;
 
--- Attach the trigger to auth.users
-CREATE OR REPLACE TRIGGER on_auth_user_created
+-- Attach the trigger to auth.users (drop any old/legacy version first)
+DROP TRIGGER IF EXISTS on_auth_user_created ON auth.users;
+DROP TRIGGER IF EXISTS on_auth_user_created_assign_member_role ON auth.users;
+
+CREATE TRIGGER on_auth_user_created
   AFTER INSERT ON auth.users
   FOR EACH ROW
   EXECUTE FUNCTION public.handle_new_user();
