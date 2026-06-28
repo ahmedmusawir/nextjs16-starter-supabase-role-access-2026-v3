@@ -6,8 +6,8 @@
 >
 > If a primitive exists, you USE it. You do not author a parallel one. If a primitive is close but not quite right, surface a Kit Improvement Proposal — don't fork silently.
 
-**Kit:** Stark SaaS Starter (v0.4.1)
-**Last Updated:** 2026-05-31
+**Kit:** Stark SaaS Starter — Starter Kit v3 (post Kit-Perfection campaign)
+**Last Updated:** 2026-06-28
 **Pairs with:** `STARTER_KIT_HANDBOOK.md` (sibling file)
 
 ---
@@ -38,8 +38,8 @@ What are you trying to build?
 │   ├─ Generic content block (card, bubble)? → Box
 │   ├─ Semantic <main>? → Main
 │   ├─ Navigation sidebar (role-specific)? → Sidebar / AdminSidebar / SuperadminSidebar
-│   ├─ Top navbar (page-specific variant)? → Navbar / NavbarHome / NavbarSuperadmin
-│   └─ Mobile slide-over drawer? → Sheet (Shadcn primitive)
+│   ├─ Top navbar? → Navbar (portal) / PublicNav (marketing) / NavbarLoginReg (auth)
+│   └─ Mobile slide-over drawer? → Sheet (kit-authored `ui/sheet.tsx`)
 │
 ├─ A FORM
 │   ├─ Login form? → LoginForm (already wired)
@@ -262,10 +262,14 @@ These are the kit's reusable building blocks. They are mobile-first by default a
 }
 ```
 
-**Mobile behavior (built-in):**
-- Below `md` (<768px): sidebar becomes hamburger-triggered slide-over
-- Above `md`: sidebar persistent (250px wide), main takes remainder
-- Top bar visible only on mobile
+**Mobile behavior (built-in) — REAL as of Gate 2/3 (Kit-Perfection):**
+- Below `xl` (<1280px): sidebar becomes a hamburger-triggered slide-over (a `Sheet`,
+  side="left") under a two-bar layout (the shared `Navbar` + a trigger bar). Dismiss
+  via close-on-nav (`usePathname`), outside-tap, and Esc.
+- `xl`+ (>=1280): sidebar persistent (`w-[25rem]`), main takes the remainder.
+- `sidebar` may be a render-fn `(close) => ReactNode` so a panel can close on a
+  terminal action. The 4 CP scars: close-on-nav, passable `close`, ~25rem capped to
+  85vw, native dismiss.
 
 **Theme behavior:**
 - Dark mode default: `dark:bg-zinc-800` (softer than `zinc-950`)
@@ -372,10 +376,14 @@ Site-wide components used across all pages.
 
 **Purpose:** Default site navbar
 
-**Variants:**
-- `Navbar` — default
-- `NavbarHome` — home page variant
-- `NavbarSuperadmin` — superadmin portal variant
+**Variants (actual on disk):**
+- `Navbar` — authenticated portal top bar
+- `NavbarLoginReg` — minimal auth-pages bar (logo + theme)
+- `PublicNav` — public/marketing nav (logo + portal links + theme + auth island)
+- `PublicNavAuthSection` — auth-state island consumed by `PublicNav`
+- `PublicMobileNav` — hamburger + `Sheet` mobile menu for the public nav (< lg)
+
+(`NavbarHome` / `NavbarSuperadmin` do NOT exist — removed from this registry.)
 
 **When to use:**
 - Top of public pages
@@ -476,7 +484,7 @@ Standard Shadcn components installed and themed.
 |---|---|---|
 | `Card` | Bordered content container (Header, Content, Footer) | Information panels, stat cards |
 | `Dialog` | Modal dialog | Confirmations, complex forms |
-| `Sheet` | Slide-over panel | Mobile menus, side details |
+| `Sheet` | Slide-over panel (kit-authored `ui/sheet.tsx`, on Radix dialog) | Mobile menus, side details |
 | `Tabs` | Tab navigation | Multi-view content within a page |
 | `Separator` | Horizontal or vertical divider | Section breaks |
 | `ScrollArea` | Custom-styled scrollable container | Long content lists |
@@ -774,6 +782,7 @@ If you find yourself needing any of these, you've found a Kit Improvement Propos
 
 | Version | Date | Changes |
 |---|---|---|
+| 1.1 | 2026-06-28 | Kit-Perfection reconciliation: `AppShellPage` + `Sheet` are REAL (built Gates 2–3); breakpoint `md`→`xl`, two-bar + render-fn sidebar + 4 CP scars; removed non-existent `NavbarHome`/`NavbarSuperadmin`; added real global components (`PublicNav`/`PublicNavAuthSection`/`NavbarLoginReg`/`PublicMobileNav`). |
 | 1.0 | 2026-05-31 | Initial registry authored from kit v0.4.1 + Run 001 lessons |
 
 ---
