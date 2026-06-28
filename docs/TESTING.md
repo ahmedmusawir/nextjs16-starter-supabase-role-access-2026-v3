@@ -119,31 +119,13 @@ File:
 
 ---
 
-## 3. `superadmin-add-user.test.ts`
+## 3. `superadmin-add-user.test.ts` — REMOVED (Gate 6)
 
-File:
-
-- `src/__tests__/superadmin-add-user.test.ts`
-
-### What it proves
-
-- a verified superadmin can create a new admin user successfully
-- the admin client creates the auth user
-- the role update writes to `user_roles`
-- a `member` caller gets `403`
-- an `admin` caller gets `403`
-- unauthorized callers never reach the service-role admin client
-- unauthenticated callers get `401`
-- malformed payloads get `400`
-
-### Why it matters
-
-This is the most sensitive API in the starter. It exercises the **One-Two Punch** security model:
-
-1. verify the caller is truly a superadmin
-2. only then invoke the service-role client
-
-If this route is weak, your RBAC system is weak.
+This test, and the `/api/auth/superadmin-add-user` route it covered, were **deleted**
+in Gate 6: the route was a dead fossil (zero live callers — the superadmin UI uses the
+`addUser` server action). Superadmins are created in the Supabase console only
+(console-only doctrine). RBAC is now exercised by the `protectPage` tests and the
+`(superadmin)/actions` server-action tests instead.
 
 ---
 

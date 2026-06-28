@@ -184,9 +184,9 @@ export async function addMember(formData: {
     email_confirm: true,
     user_metadata: {
       full_name: fullName,
-      // NOTE: role here is currently unconsumed — the trigger hard-codes 'member'.
-      // See KNOWN_ISSUES.md (role-drop). (For addMember the intent is 'member'
-      // anyway, so it happens to agree with the trigger.)
+      // NOTE: the Mark IV trigger consumes this metadata role (honors it; defaults
+      // 'member' if absent) — see supabase/setup.sql. For addMember it's 'member'
+      // either way.
       role: "member",
     },
   });

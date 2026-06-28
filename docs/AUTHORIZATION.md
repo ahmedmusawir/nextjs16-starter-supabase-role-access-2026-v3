@@ -168,11 +168,17 @@ That means every page under that route group inherits the same gate.
 
 ## The One-Two Punch: Admin Creation Flow
 
-Privileged admin creation is handled by:
+Privileged user creation is handled by **server actions** behind role-gated layouts
+(not a public API route):
 
-- `POST /api/auth/superadmin-add-user`
+- Superadmin creates admin/member → `addUser` (`(superadmin)/superadmin-portal/actions.ts`)
+- Admin creates member → `addMember` (`(admin)/admin-portal/actions.ts`)
 
-This is intentionally a **two-stage authorization flow**.
+This is still a **two-stage authorization flow**: the route-group layout gates access
+(`protectPage([AppRole.SUPERADMIN])` / `[AppRole.ADMIN]`), and only then does the
+server action invoke the service-role admin client. (The legacy
+`POST /api/auth/superadmin-add-user` route was removed in Gate 6 — superadmins are
+created in the Supabase console only.)
 
 ## Punch One: Verify the caller is a superadmin
 

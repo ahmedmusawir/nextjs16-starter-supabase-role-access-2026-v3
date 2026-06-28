@@ -92,7 +92,7 @@ The kit ships with a complete Supabase SSR auth stack. Three client types, reque
 - `logout/route.ts` — clears session
 - `signup/route.ts` — public signup, creates `member` role; **metadata key MUST be `full_name`**
 - `confirm/route.ts` — email confirmation callback
-- `superadmin-add-user/route.ts` — admin-side user creation
+- (the `superadmin-add-user/route.ts` fossil was removed; admin-side user creation is via the `addMember`/`addUser` server actions)
 
 **Client Auth State:**
 
@@ -542,7 +542,6 @@ Data from the database for initial render?
 | `actions.test.ts` (protectPage) | 7 |
 | `get-user-role.test.ts` | 4 |
 | `proxy.test.ts` | 3 |
-| `superadmin-add-user.test.ts` | 4 |
 | `superadmin/actions.test.ts` | 14 |
 | `superadmin/AddUserForm.test.tsx` | 6 |
 | `superadmin/EditUserForm.test.tsx` | 6 |

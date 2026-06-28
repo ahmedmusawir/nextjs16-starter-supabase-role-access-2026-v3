@@ -1,8 +1,8 @@
 # UI/UX BUILDING MANUAL
 
 **Project:** Stark SaaS Starter Kit  
-**Version:** 1.2  
-**Last Updated:** June 2, 2026  
+**Version:** 1.3  
+**Last Updated:** June 28, 2026  
 **Purpose:** Standardized guide for building pages and components consistently across all projects
 
 ---
@@ -172,7 +172,7 @@ This manual documents the **proven patterns** used in this starter kit. The goal
 ```
 src/components/
 ├── common/              # Reusable layout primitives (Page, Row, Box, etc.)
-├── global/              # Site-wide components (Navbar, ThemeToggler)
+├── global/              # Site-wide components (Navbar, ThemeToggle)
 ├── layout/              # Navigation components (Sidebar, AdminSidebar)
 ├── ui/                  # shadcn/ui components (Button, Card, etc.)
 ├── auth/                # Authentication components
@@ -187,10 +187,7 @@ src/components/
 src/app/
 ├── (public)/            # Public routes (no auth required)
 │   ├── page.tsx         # Minimal - imports PageContent
-│   ├── PageContent.tsx  # Actual content implementation
-│   └── demo/
-│       ├── page.tsx
-│       └── DemoPageContent.tsx
+│   └── PageContent.tsx  # Actual content implementation
 ├── (auth)/              # Auth routes
 ├── (members)/           # Member-protected routes
 │   ├── layout.tsx       # Navbar + Sidebar layout
@@ -430,9 +427,8 @@ Site-wide components used across all pages. Located in `src/components/global/`.
 ### Navbar Components
 
 **Files:**
-- `Navbar.tsx` - Default navbar (members/admin)
-- `NavbarHome.tsx` - Public home navbar
-- `NavbarSuperadmin.tsx` - Superadmin navbar
+- `Navbar.tsx` - Default navbar (members/admin/superadmin portals)
+- `PublicNav.tsx` - Public marketing navbar (with `PublicMobileNav.tsx` for the mobile sheet)
 - `NavbarLoginReg.tsx` - Auth pages navbar
 
 **Common Features:**
@@ -460,20 +456,20 @@ export default async function MemberLayout({ children }) {
 
 ---
 
-### ThemeToggler Component
+### ThemeToggle Component
 
-**File:** `src/components/global/ThemeToggler.tsx`
+**File:** `src/components/global/ThemeToggle.tsx`
 
-**Purpose:** Dark/light mode toggle button
+**Purpose:** Light/dark/system theme switcher (dropdown via next-themes)
 
 **Usage:**
 ```tsx
-import ThemeToggler from "@/components/global/ThemeToggler";
+import ThemeToggle from "@/components/global/ThemeToggle";
 
-<ThemeToggler />
+<ThemeToggle />
 ```
 
-**Automatically included in all Navbar components**
+**Included on every navbar surface** (`Navbar`, `PublicNav`, `NavbarLoginReg`).
 
 ---
 
@@ -630,7 +626,7 @@ export default FeatureNamePageContent;
 | Layout | `layout.tsx` | `layout.tsx` |
 | Component | `[ComponentName].tsx` | `BackButton.tsx` |
 | Sidebar | `[Role]Sidebar.tsx` | `AdminSidebar.tsx` |
-| Navbar | `Navbar[Variant].tsx` | `NavbarHome.tsx` |
+| Navbar | `Navbar[Variant].tsx` | `NavbarLoginReg.tsx` |
 
 ### Examples
 
@@ -2152,10 +2148,11 @@ This manual is a **living document**. Updates happen at three triggers:
 
 | Version | Date | Changes |
 |---|---|---|
+| 1.3 | 2026-06-28 | Renamed `ThemeToggler` → `ThemeToggle` (the real shipped component) throughout; dropped deleted-orphan references. Kit Hardening Gate 10. |
 | 1.2 | 2026-06-02 | Added Rule Zero-B (theming as the second foundational posture). Added TOC entries for Rule Zero and Rule Zero-B. Authored companion `THEMING_MANUAL_v1.0.md`. Added Lesson 9 appendix. Born from Cyber Pharma Run 002. |
 | 1.1 | 2026-05-31 | Added Rule Zero (mobile-first foundational posture) at top. Added Lesson 5 appendix. Fixed UTF-8 encoding artifacts throughout. Born from Cyberize Run 001. |
 | 1.0 | 2025-12-30 | Initial manual authored |
 
 ---
 
-🥄 *Part of Stark Industries — App Factory v1.2 doctrine.*
+🥄 *Part of Stark Industries — App Factory v1.3 doctrine.*

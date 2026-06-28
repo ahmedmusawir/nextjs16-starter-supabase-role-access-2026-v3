@@ -1,73 +1,55 @@
 # Known Issues
 
-> Recorded during the Starter Kit v3 "Kit Perfection" hardening campaign (Gate 5,
-> 2026-06-26). These are **deliberately NOT fixed in the kit**: the DB trigger is
-> backend state (applied per Supabase instance, not kit-shippable), and the portals
-> are proof-of-concept that get rewritten in a real app. **Fix these when wiring a
-> REAL Supabase backend / real RBAC model.**
+> **STATUS (2026-06-28): all previously-tracked issues are RESOLVED.** Both bugs below
+> were fixed in **Gate 10 Phase A** — `supabase/setup.sql` now ships the **Mark IV
+> smart trigger**, and the fix was **proven live** against the connected Supabase (a
+> create-then-delete test). This file is retained as a **historical record** of what
+> was wrong and how it was fixed. **There are no open issues.**
 >
-> Surfaced by the `stark-recon` report (Surprise #3) and verified in Gate 5. See
-> `agent_docs/RECON/RECON_starter-kit-v3_kit-hardening_2026-06-26.md`.
+> Surfaced by the `stark-recon` report (Surprise #3), verified Gate 5, FIXED Gate 10
+> Phase A (2026-06-28). See `agent_docs/RECON/RECON_starter-kit-v3_kit-hardening_2026-06-26.md`.
 
 ---
 
-## Known Issue 1 — `profiles.full_name` NULL at creation
+## ✅ RESOLVED — Issue 1: `profiles.full_name` was NULL at creation
 
-**Root cause:** the trigger `handle_new_user()` (`supabase/setup.sql`) reads
-`raw_user_meta_data ->> 'name'`, but **every user-creation writer writes the key
-`'full_name'`** (or nothing):
+**What was wrong:** the old `handle_new_user()` trigger read `raw_user_meta_data ->>
+'name'`, but every writer writes `'full_name'` — so `profiles.full_name` landed NULL
+at creation (the UI showed `"—"` until a manual profile edit).
 
-- signup — `src/app/api/auth/signup/route.ts` → `options.data.full_name`
-- admin `addMember` — `src/app/(admin)/admin-portal/actions.ts` → `user_metadata.full_name`
-- superadmin `addUser` (live) — `src/app/(superadmin)/superadmin-portal/actions.ts` → `user_metadata.full_name`
-- `/api/auth/superadmin-add-user` route — dead fossil; writes no metadata at all
+**Fixed (Gate 10 Phase A):** the **Mark IV trigger** (`supabase/setup.sql`) reads
+`->> 'full_name'` — the key the writers actually write. **Proven live 2026-06-28:** a
+test user created with `{ full_name: 'Mark IV Test' }` → `profiles.full_name = 'Mark
+IV Test'` (not null).
 
-**Effect:** every new user's `profiles.full_name` is **NULL at creation**. No
-creation path patches it afterward; it's only populated later if someone edits the
-profile (`editUser` / `ProfileForm`). The UI shows `"—"` until then. Real and
-universal, but recoverable by a manual edit.
+## ✅ RESOLVED — Issue 2: superadmin role-drop (was a 🔴 silent privilege bug)
 
-**Prescribed fix (real-project time):** align the key. Recommended canonical key is
-**`'full_name'`** — it matches the `profiles.full_name` column, `editUser`, and
-`ProfileForm`. Either fix the trigger to read `'full_name'`, OR change all writers
-to `'name'`. The **trigger is the better single-point fix** (one place vs. many
-writers), BUT it lives in backend SQL → must be applied per Supabase instance.
+**What was wrong:** the old trigger hard-coded `user_roles.role = 'member'` and ignored
+the metadata role, so a UI-created "admin" was silently created as a **member**.
 
-## Known Issue 2 — superadmin role-drop (🔴 silent privilege bug)
+**Fixed (Gate 10 Phase A):** the **Mark IV trigger** reads + applies the metadata
+`role` (defaulting to `'member'` only when absent) — no separate `user_roles` update
+needed. **Proven live 2026-06-28:** a test user created with `{ role: 'admin' }` →
+`user_roles.role = 'admin'` (not downgraded).
 
-**Root cause:** the trigger hard-codes `user_roles.role = 'member'` and ignores any
-metadata role. The live superadmin `addUser` writes `role: formData.role` into
-`user_metadata` → the trigger **discards it** → a UI-created **"admin" is silently
-created as a MEMBER**. No error is shown.
+> The writers already wrote `full_name` + `role`; the old dumb trigger just ignored
+> them. Mark IV makes writers + trigger agree. **Doctrine still holds:** superadmins
+> are created in the Supabase **console only** (console-only) — the kit offers no
+> app-side superadmin-creation surface.
 
-The only path that correctly sets the role is the **fossil** route
-`/api/auth/superadmin-add-user` (it does a `user_roles.update({ role })` second
-step) — but that route is unreferenced/dead. Unit tests mock `createUser`, so they
-assert the metadata payload shape, not the real trigger outcome → they don't catch
-it.
+---
 
-**Prescribed fix (real-project time):** either the trigger reads + applies the
-metadata role, OR each live creation path does a `user_roles` second-step update
-after `createUser`. Decide with the real RBAC model.
+## Reference — 2nd-step role pattern (no longer needed; kept for reference)
 
-**Reference 2nd-step role pattern** — this was implemented in the now-removed fossil
-route `/api/auth/superadmin-add-user` (deleted in Gate 6). Preserved here for
-admin/member assignment IF a real project wants app-side role-setting:
+Before Mark IV, the only correct role-setter was a `user_roles.update({ role })` second
+step (it lived in the now-removed `superadmin-add-user` fossil route, deleted Gate 6).
+With Mark IV the trigger honors the metadata role directly, so this is **not needed**.
+Kept only as a reference for projects that want app-side role-setting for the lower
+roles (admin/member):
 
 ```js
-// After createUser: update the auto-created user_roles row to the requested role.
-const newUserId = data.user?.id;
-if (!newUserId) { /* handle: user created but ID missing */ }
-
-const { error: roleUpdateError } = await adminClient
+const { error } = await adminClient
   .from("user_roles")
   .update({ role })
   .eq("user_id", newUserId);
-// handle roleUpdateError: "user created but role update failed"
 ```
-
-> **NOTE — superadmin creation is CONSOLE-ONLY by kit doctrine.** Never re-add an
-> app-side superadmin-creation route (it's a privilege-escalation surface). This
-> snippet is for the **lower-role (admin/member)** pattern only. A superadmin-created
-> user landing as `member` is acceptable in this model — promotion to superadmin
-> happens in the Supabase console, not the app.

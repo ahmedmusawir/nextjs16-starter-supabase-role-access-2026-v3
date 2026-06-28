@@ -1,10 +1,11 @@
 # AUTHENTICATION & SUPABASE INTEGRATION MANUAL
 
 **Project:** Stark SaaS Starter Kit
-**Version:** 1.1
-**Last Updated:** May 31, 2026
+**Version:** 1.2
+**Last Updated:** June 28, 2026
 **Born from:** Cyberize Run 001 — Lesson 2 (redundant authService)
 **Purpose:** Complete guide for authentication, authorization, and Supabase integration patterns
+**Changelog (1.2):** Removed the deleted `POST /api/auth/superadmin-add-user` route (creation is now via the `addMember`/`addUser` server actions); documented the Mark IV `handle_new_user` trigger that applies the metadata `role` + `full_name` at creation. Kit Hardening Gate 10.
 
 ---
 
@@ -26,7 +27,7 @@
 | Logout endpoint | `/api/auth/logout` | POST to clear session |
 | Signup endpoint | `/api/auth/signup` | POST email/password/full_name |
 | Email confirmation | `/api/auth/confirm` | GET callback |
-| Admin user creation | `/api/auth/superadmin-add-user` | POST with metadata |
+| User creation (admin/superadmin) | `addMember` / `addUser` server actions | role-gated layout + service-role admin client |
 | Client auth state | `src/store/useAuthStore.ts` | Zustand store with user + role flags |
 | Server-side page protection | `src/utils/supabase/actions.ts` | `protectPage([AppRole.X])` |
 | Login form UI | `src/components/auth/LoginForm.tsx` | Pre-wired to `/api/auth/login` |
@@ -633,25 +634,19 @@ export async function GET(request: NextRequest) {
 
 ---
 
-### POST /api/auth/superadmin-add-user
+### User creation — server actions (no API route)
 
-**Purpose:** Admin endpoint to create users with custom roles
+User creation is handled by **server actions** behind role-gated layouts, not a public
+API route. The legacy `POST /api/auth/superadmin-add-user` route was removed (Gate 6).
 
-**Request:**
-```typescript
-{
-  email: string;
-  password: string;
-  user_metadata: {
-    name: string;
-    is_qr_superadmin: 0 | 1;
-    is_qr_admin: 0 | 1;
-    is_qr_member: 0 | 1;
-  }
-}
-```
+- Admin → `addMember` (`(admin)/admin-portal/actions.ts`) — creates a `member`
+- Superadmin → `addUser` (`(superadmin)/superadmin-portal/actions.ts`) — creates admin/member
 
-**⚠️ Security Note:** Should be protected with admin-only middleware (not currently implemented)
+**Authorization:** the route-group layout gates access (`protectPage([AppRole.X])`); only
+then does the action call the service-role admin client. **Role + name:** both are written
+into `user_metadata` (`role`, `full_name`) and applied at creation by the **Mark IV**
+`handle_new_user()` trigger. Superadmins are created in the Supabase console only
+(console-only doctrine).
 
 ---
 
@@ -1731,8 +1726,7 @@ src/
 │           ├── login/route.ts      # POST login
 │           ├── logout/route.ts     # POST logout
 │           ├── signup/route.ts     # POST signup
-│           ├── confirm/route.ts    # GET email confirm
-│           └── superadmin-add-user/route.ts
+│           └── confirm/route.ts    # GET email confirm
 ├── components/
 │   └── auth/
 │       ├── AuthTabs.tsx            # Tab switcher

@@ -137,8 +137,8 @@ export async function addUser(formData: {
     email_confirm: true,
     user_metadata: {
       full_name: fullName,
-      // NOTE: role here is currently unconsumed — the trigger hard-codes 'member'.
-      // See KNOWN_ISSUES.md (role-drop): a UI-created "admin" lands as a member.
+      // NOTE: the Mark IV trigger consumes this metadata role and honors it at
+      // creation (no separate user_roles update needed) — see supabase/setup.sql.
       role: formData.role,
     },
   });
@@ -154,10 +154,6 @@ export async function addUser(formData: {
     }
     return { error: error.message };
   }
-
-  // NOTE: the trigger hard-codes role='member' and reads 'name' (not 'full_name').
-  // The role/full_name in user_metadata here are NOT applied at creation — the new
-  // user lands as a member with a NULL full_name. See KNOWN_ISSUES.md (both bugs).
 
   revalidatePath("/superadmin-portal");
   return {};
