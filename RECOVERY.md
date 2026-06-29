@@ -4,7 +4,7 @@
 Starter Kit v3 build — hardening a fresh v2 clone via the `starter-kit-cleaner` skill.
 
 ## Last action
-2026-06-29 — **★ GATE 10 CLOSED — KIT PERFECTION CAMPAIGN COMPLETE (all 10 gates closed). ★** FINAL gate. Phase B docs harvest done: COMPONENT_REGISTRY v1.1 (drift fixed, AppShellPage/Sheet real), stale-debt purged (`superadmin-add-user`, `ThemeToggler`→`ThemeToggle`), STARTER_KIT_HANDBOOK v1.0→v1.1 (LESSONS_BIN HARVESTED), AUTH_MANUAL v1.2, UI-UX v1_3, APP_ARCHITECTURE v1.2, FRONTEND_FIRST v1.1.2; teaching examples re-pointed to live files; stale test count (81→76) + `next/head`→App-Router `metadata` fixed. Verified: cold build EXIT 0, 76/76, re-greps clean. Phase B commits `6163c17`/`572d447`/`8d1a418`/`4dd8151`/`1c0881c` on branch `gate-2-app-shell`; **final two-fix commit (81→76 + next/head) PENDING operator git** (on disk + verified green). `main` untouched at `c3692d5`. BACKLOG (none blocking): doctrine-sync to MissionControl/CP-v1 (`DOCTRINE_SYNC_MANIFEST`); canonical doctrine repo + skill-management design sessions.
+2026-06-29 — **★ GATE 10 CLOSED — KIT PERFECTION CAMPAIGN COMPLETE (all 10 gates closed). ★** FINAL gate. Phase B docs harvest done: COMPONENT_REGISTRY v1.1 (drift fixed, AppShellPage/Sheet real), stale-debt purged (`superadmin-add-user`, `ThemeToggler`→`ThemeToggle`), STARTER_KIT_HANDBOOK v1.0→v1.1 (LESSONS_BIN HARVESTED), AUTH_MANUAL v1.2, UI-UX v1_3, APP_ARCHITECTURE v1.2, FRONTEND_FIRST v1.1.2; teaching examples re-pointed to live files; stale test count (81→76) + `next/head`→App-Router `metadata` fixed. Verified: cold build EXIT 0, 76/76, re-greps clean. Phase B commits `6163c17`/`572d447`/`8d1a418`/`4dd8151`/`1c0881c` + the final two-fix commit (81→76 + next/head) + this close-log — **all committed AND pushed by the operator (2026-06-29)** on branch `gate-2-app-shell`. Working tree clean. `main` untouched at `c3692d5` (merge/tag pending operator). BACKLOG (none blocking): doctrine-sync to MissionControl/CP-v1 (`DOCTRINE_SYNC_MANIFEST`); canonical doctrine repo + skill-management design sessions.
 
 (Prior) 2026-06-28 — **GATE 10 PHASE A CLOSED.** Upgraded `setup.sql` trigger to **Mark IV** (`71ad14e`): honors metadata role, reads `full_name`, idempotent; no writer changes. **RESOLVES both KNOWN_ISSUES bugs** (no longer deferred — FIXED in shipped schema). **LIVE PROOF** on the CP v1 Supabase: schema matches; live trigger was **already Mark IV** (dumb trigger only ever existed in the kit's old `setup.sql`, never live); create-then-delete test → `full_name='Mark IV Test'` (not null) + `role='admin'` (not downgraded) → both fixed live; test user deleted clean, DB back to 4 / zero residue. Resolves the inventory's headline conflict (setup.sql now matches handbook + migration + live DB). NOTE: CP v1 + MissionControl share this Supabase — both already on Mark IV; the fix protects FUTURE clones. Repo: cold build EXIT 0, 76/76, `main` untouched at `c3692d5`.
 
@@ -31,7 +31,7 @@ Starter Kit v3 build — hardening a fresh v2 clone via the `starter-kit-cleaner
 (Prior) Phase 8 COMPLETE — v3 verified clean. All five grep gates ZERO. Superadmin intact. Verification triad from cold: tsc EXIT 0; npm test 11 suites / 81/81; cold `npm run build` with NO `.env.local` clean.
 
 ## Pending
-**One git action for the operator:** commit the final two-fix change (home `81/81`→`76/76` + UI-UX `next/head`→App-Router `export const metadata`) — on disk + verified green, not yet committed (git handed to the operator). Otherwise: **None — campaign complete.**
+**None — campaign complete, all committed + pushed (2026-06-29).** Working tree clean. Branch `gate-2-app-shell` is the merge/tag candidate; `main` still at `c3692d5` until the operator merges/tags.
 
 ## Current session
 2026-06-25 — KIT hardening underway (v3 is now the generic base, not "spawned off superadmin").
@@ -54,8 +54,13 @@ Ground truth = recon report `agent_docs/RECON/RECON_starter-kit-v3_kit-hardening
 - Verified: cold build EXIT 0 · 81/81 tests · tsc EXIT 0. **`(members)`/`(superadmin)` deliberately UNTOUCHED** — they still carry the old `hidden md:block` rail; the AppShellPage rollout to them is Gate 3.
 - **Round-2 fix `d7dec9d`:** breakpoint `lg`→`xl` in AppShellPage (rail persists ≥`xl` 1280; hamburger + drawer <`xl`) + admin card grid `grid-cols-1 md:2 lg:3` → `grid-cols-1 xl:grid-cols-2`. Operator-diagnosed: rail persisted too early (1024) → user-card Edit+Delete overflow. Fixed in the blessed primitive so Gate 3 inherits it. NOTE: superadmin's `SuperadminPortalPageContent.tsx` carries the same `md:2/lg:3` card grid → needs the same `xl` treatment in Gate 3.
 
-## Next step
-**★ CAMPAIGN COMPLETE — all 10 gates closed. ★** No further gates. Open the BACKLOG (none blocking) when ready: (1) doctrine-sync to MissionControl / CP-v1 (see `DOCTRINE_SYNC_MANIFEST`); (2) stand up a canonical doctrine repo + skill-management design sessions. Branch `gate-2-app-shell` holds all hardening work; `main` untouched at `c3692d5` (operator decides merge/tag). Open git item: the final two-fix commit (see Pending).
+## Next step — WHEN WE RETURN, START HERE
+**★ CAMPAIGN COMPLETE — all 10 gates closed, committed + pushed. ★** Nothing in flight; working tree clean. Pick up from the BACKLOG (none blocking), operator chooses order:
+1. **Merge/tag decision** — `gate-2-app-shell` → `main` (e.g. tag `v3`). `main` is still at `c3692d5`.
+2. **Doctrine-sync** to MissionControl / CP-v1 (see `DOCTRINE_SYNC_MANIFEST`) — propagate the hardened docs (handbook v1.1, registry v1.1, AUTH_MANUAL v1.2, UI-UX v1_3, APP_ARCHITECTURE v1.2, FRONTEND_FIRST v1.1.2) to the live projects.
+3. **Canonical doctrine repo** + skill-management design sessions.
+
+**Standing rule (active):** the operator owns git — I edit files + verify, then hand over commands. I do NOT run git unless explicitly told.
 
 ## Invariants (do not violate)
 - KEEP superadmin (three-tier RBAC).
