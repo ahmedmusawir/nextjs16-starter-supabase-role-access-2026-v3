@@ -33,7 +33,7 @@ const HomePage = () => {
           <span aria-hidden>·</span>
           <span>Token-driven design system</span>
           <span aria-hidden>·</span>
-          <span>Tested 81/81</span>
+          <span>Tested 76/76</span>
         </div>
       </Row>
 

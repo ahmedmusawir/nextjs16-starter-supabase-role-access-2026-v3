@@ -551,7 +551,14 @@ feature-name/
 **File:** `src/app/(group)/feature-name/page.tsx`
 
 ```tsx
+import type { Metadata } from "next";
 import FeatureNamePageContent from "./FeatureNamePageContent";
+
+// App Router: page-level title/meta live here, NOT in a next/head inside the content.
+export const metadata: Metadata = {
+  title: "Feature Name",
+  description: "Description of the page",
+};
 
 const FeatureName = () => {
   return <FeatureNamePageContent />;
@@ -573,22 +580,15 @@ export default FeatureName;
 **File:** `src/app/(group)/feature-name/FeatureNamePageContent.tsx`
 
 ```tsx
-import React from "react";
-import Head from "next/head";
 import Page from "@/components/common/Page";
 import Row from "@/components/common/Row";
 import Box from "@/components/common/Box";
 import { Button } from "@/components/ui/button";
 
+// Title/meta live in page.tsx via `export const metadata` (App Router) — not here.
 const FeatureNamePageContent = () => {
   return (
-    <>
-      <Head>
-        <title>Feature Name</title>
-        <meta name="description" content="Description of the page" />
-      </Head>
-      
-      <Page FULL={false} className="">
+    <Page FULL={false} className="">
         <Row className="">
           <h1 className="h1">Page Title</h1>
           {/* content */}
@@ -600,7 +600,6 @@ const FeatureNamePageContent = () => {
           </Box>
         </Row>
       </Page>
-    </>
   );
 };
 
@@ -608,7 +607,7 @@ export default FeatureNamePageContent;
 ```
 
 **Structure:**
-1. **Head section** - SEO metadata
+1. **Page metadata** - title/description via `export const metadata` in `page.tsx`
 2. **Page wrapper** - Controls page width
 3. **Row sections** - Organize content horizontally
 4. **Box components** - Individual content blocks
@@ -1038,7 +1037,14 @@ export default async function MemberLayout({ children }: LayoutProps) {
 
 **File:** `src/app/(members)/members-portal/page.tsx`
 ```tsx
+import type { Metadata } from "next";
 import MembersPortalPageContent from "./MembersPortalPageContent";
+
+// App Router: page-level title/meta belong here, not in a next/head.
+export const metadata: Metadata = {
+  title: "Members Portal",
+  description: "Members dashboard",
+};
 
 export default function MembersPortalPage() {
   return <MembersPortalPageContent />;
@@ -1049,27 +1055,19 @@ export default function MembersPortalPage() {
 ```tsx
 import Page from "@/components/common/Page";
 import Row from "@/components/common/Row";
-import Head from "next/head";
 
 const MembersPortalPageContent = () => {
   return (
-    <>
-      <Head>
-        <title>Members Portal</title>
-        <meta name="description" content="Members dashboard" />
-      </Head>
-      
-      <Page FULL={false} className="">
-        <Row className="">
-          <h1 className="h1">Members Portal</h1>
-          <p className="text-muted-foreground">
-            Welcome to the Members Portal.
-          </p>
-        </Row>
-        
-        {/* Add more rows for dashboard widgets */}
-      </Page>
-    </>
+    <Page FULL={false} className="">
+      <Row className="">
+        <h1 className="h1">Members Portal</h1>
+        <p className="text-muted-foreground">
+          Welcome to the Members Portal.
+        </p>
+      </Row>
+
+      {/* Add more rows for dashboard widgets */}
+    </Page>
   );
 };
 
@@ -1092,7 +1090,7 @@ export default MembersPortalPageContent;
 - [ ] Create `page.tsx` (minimal wrapper, 3-8 lines)
 - [ ] Create `FeatureNamePageContent.tsx` (actual implementation)
 - [ ] Import common components: `Page`, `Row`, `Box`
-- [ ] Add Head section with title and meta
+- [ ] Add page metadata (`export const metadata`) in `page.tsx`
 - [ ] Wrap content in `<Page FULL={false}>`
 - [ ] Organize content in `<Row>` sections
 - [ ] Use `<Box>` for individual content blocks
@@ -1118,7 +1116,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 
 // Next.js
-import Head from "next/head";
+import type { Metadata } from "next"; // page.tsx: export const metadata
 import Link from "next/link";
 import Image from "next/image";
 
@@ -1353,25 +1351,18 @@ npm run create:page admin/users
   "Page Content Component": {
     "prefix": "pagecontent",
     "body": [
-      "import React from 'react';",
-      "import Head from 'next/head';",
       "import Page from '@/components/common/Page';",
       "import Row from '@/components/common/Row';",
       "",
+      "// Page title/meta: set `export const metadata` in page.tsx (App Router).",
       "const ${1:ComponentName}PageContent = () => {",
       "  return (",
-      "    <>",
-      "      <Head>",
-      "        <title>${2:Page Title}</title>",
-      "        <meta name='description' content='${3:Description}' />",
-      "      </Head>",
       "      <Page FULL={false} className=''>",
       "        <Row className=''>",
       "          <h1 className='h1'>${2:Page Title}</h1>",
       "          $0",
       "        </Row>",
       "      </Page>",
-      "    </>",
       "  );",
       "};",
       "",
@@ -2124,7 +2115,7 @@ This manual is a **living document**. Updates happen at three triggers:
 
 | Version | Date | Changes |
 |---|---|---|
-| 1.3 | 2026-06-28 | Renamed `ThemeToggler` → `ThemeToggle` (the real shipped component) throughout; dropped deleted-orphan references. Kit Hardening Gate 10. |
+| 1.3 | 2026-06-28 | Renamed `ThemeToggler` → `ThemeToggle` (the real shipped component) throughout; dropped deleted-orphan references; re-pointed deleted-demo teaching examples to live files (Example 1 → public home, Example 2 → illustrative); replaced `next/head` (Pages Router) with the App-Router `export const metadata` API in all page examples + the VS Code snippet. Kit Hardening Gate 10. |
 | 1.2 | 2026-06-02 | Added Rule Zero-B (theming as the second foundational posture). Added TOC entries for Rule Zero and Rule Zero-B. Authored companion `THEMING_MANUAL_v1.0.md`. Added Lesson 9 appendix. Born from Cyber Pharma Run 002. |
 | 1.1 | 2026-05-31 | Added Rule Zero (mobile-first foundational posture) at top. Added Lesson 5 appendix. Fixed UTF-8 encoding artifacts throughout. Born from Cyberize Run 001. |
 | 1.0 | 2025-12-30 | Initial manual authored |
