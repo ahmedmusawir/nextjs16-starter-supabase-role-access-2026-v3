@@ -1,4 +1,4 @@
-# Next.js 16 Enterprise Starter Kit
+# Next.js 16 App Factory Starter Kit w/ Supabase RBAC/RLS
 
 **A production-grade Next.js 16 + Supabase foundation with database-authoritative RBAC, a full test rig, and factory-standard documentation.**
 
