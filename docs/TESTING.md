@@ -168,8 +168,16 @@ npm test -- --runInBand
 
 At the time of writing, the suite contains:
 
-- 4 test suites
-- 17 passing tests
+- 10 test suites
+- 76 passing tests
+
+```
+actions.test.ts                              proxy.test.ts
+get-user-role.test.ts                        member/ProfileForm.test.tsx
+admin/actions.test.ts                        admin/AddMemberForm.test.tsx
+superadmin/actions.test.ts                   superadmin/AddUserForm.test.tsx
+superadmin/EditUserForm.test.tsx             superadmin/SuperadminPortalPageContent.test.tsx
+```
 
 These target the highest-value security surfaces in the starter.
 

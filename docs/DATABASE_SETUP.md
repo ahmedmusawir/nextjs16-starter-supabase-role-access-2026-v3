@@ -4,15 +4,19 @@
 
 This document is the SQL blueprint for provisioning a fresh Supabase instance for the Pro RBAC starter kit.
 
-> **The complete runnable SQL file is at [`docs/setup.sql`](./setup.sql).**
+> **The complete runnable SQL file is at [`supabase/setup.sql`](../supabase/setup.sql).**
 > Copy its contents and paste into the Supabase SQL Editor. Run top to bottom.
+>
+> ⚠️ **That file is the single source of truth for the schema.** The SQL blocks reproduced
+> below are *illustrative* — they explain what each step does. If a block here and
+> `supabase/setup.sql` ever disagree, **the `.sql` file wins** and this doc is the bug.
 
 It provisions:
 
 - `app_role` enum
 - `public.user_roles` table + RLS
 - `public.profiles` table + RLS
-- `handle_new_user()` trigger — auto-inserts into **both** `user_roles` and `profiles` on every new signup
+- `handle_new_user()` trigger — auto-inserts into **both** `user_roles` and `profiles` on every new signup, reading the requested role and display name from `user_metadata`
 - First superadmin promotion instructions
 
 ---
@@ -20,14 +24,14 @@ It provisions:
 ## How to Apply
 
 > ### Already have `user_roles` with existing data?
-> **Do NOT run `setup.sql`** — it will fail on `CREATE TABLE` and `CREATE TYPE` for things that already exist.
+> **Do NOT run `supabase/setup.sql`** — it will fail on `CREATE TABLE` and `CREATE TYPE` for things that already exist.
 > Run **[`docs/migration_add_profiles.sql`](./migration_add_profiles.sql)** instead.
-> It only adds the `profiles` table, backfills existing users, and updates the trigger. Safe to run on a live database.
+> It only adds the `profiles` table, backfills existing users, and updates the trigger to the current version. Safe to run on a live database.
 
 ### Fresh database (no existing tables)
 
 1. Open your Supabase project → **SQL Editor**
-2. Open `docs/setup.sql` from this repo
+2. Open `supabase/setup.sql` from this repo
 3. Paste the entire file into the editor
 4. Click **Run**
 5. After it succeeds, promote your first superadmin (see Step 5 below)
@@ -99,7 +103,13 @@ CREATE POLICY "Users can update their own profile"
 
 ## Step 4 — `handle_new_user()` Trigger
 
-Fires automatically on every new auth user creation. Inserts into **both** `user_roles` (default `member`) and `profiles` (email + name from metadata).
+Fires automatically on every new auth user creation. Inserts into **both** `user_roles` and
+`profiles`, reading the same `user_metadata` keys the app writes:
+
+- **`role`** → applied to `user_roles` at creation. Falls back to `'member'` when absent.
+- **`full_name`** → written to `profiles.full_name`.
+
+Both inserts are idempotent (`ON CONFLICT DO NOTHING`), so a re-run cannot double-insert.
 
 ```sql
 CREATE OR REPLACE FUNCTION public.handle_new_user()
@@ -108,34 +118,57 @@ LANGUAGE plpgsql
 SECURITY DEFINER
 SET search_path = public
 AS $$
+DECLARE
+  assigned_role public.app_role;
 BEGIN
-  INSERT INTO public.user_roles (user_id, role)
-  VALUES (NEW.id, 'member');
+  -- Use the metadata role if provided, otherwise default to 'member'
+  IF NEW.raw_user_meta_data ->> 'role' IS NOT NULL THEN
+    assigned_role := (NEW.raw_user_meta_data ->> 'role')::public.app_role;
+  ELSE
+    assigned_role := 'member'::public.app_role;
+  END IF;
 
+  -- Insert role row (skip if one already exists)
+  INSERT INTO public.user_roles (user_id, role)
+  VALUES (NEW.id, assigned_role)
+  ON CONFLICT (user_id) DO NOTHING;
+
+  -- Insert profile row (reads full_name from metadata)
   INSERT INTO public.profiles (id, email, full_name)
   VALUES (
     NEW.id,
     NEW.email,
-    NEW.raw_user_meta_data ->> 'name'
-  );
+    NEW.raw_user_meta_data ->> 'full_name'
+  )
+  ON CONFLICT (id) DO NOTHING;
 
   RETURN NEW;
 END;
 $$;
 
-CREATE OR REPLACE TRIGGER on_auth_user_created
+-- Attach the trigger to auth.users (drop any old/legacy version first)
+DROP TRIGGER IF EXISTS on_auth_user_created ON auth.users;
+DROP TRIGGER IF EXISTS on_auth_user_created_assign_member_role ON auth.users;
+
+CREATE TRIGGER on_auth_user_created
   AFTER INSERT ON auth.users
   FOR EACH ROW
   EXECUTE FUNCTION public.handle_new_user();
 ```
 
-> **IMPORTANT:** Do NOT manually insert into `user_roles` or `profiles` when creating users via `supabase.auth.admin.createUser()`. This trigger handles it automatically.
+> **IMPORTANT:** Do NOT manually insert into `user_roles` or `profiles` when creating users via `supabase.auth.admin.createUser()`. This trigger handles it automatically — including the role. There is **no** second-step `user_roles` update in the app; pass the role in `user_metadata` and the trigger applies it.
+
+> **Why the metadata role is safe here.** `user_metadata` is user-writable in general, so it is
+> never trusted for *authorization* — every access check reads `public.user_roles`. This trigger
+> is the one narrow exception: it runs `SECURITY DEFINER` at creation time, and the only surface
+> that sets `role` is the server-side admin client (service-role key) in the Superadmin Portal.
+> A self-signup carries no `role` key and therefore lands as `'member'`.
 
 ---
 
 ## Step 5 — Promote the First Superadmin
 
-Every user starts as `member`. The first superadmin must be promoted manually once:
+A self-signup always starts as `member` (the signup route sends no `role` in metadata). Portal-created users get the role the admin selected. Either way, **no app surface can mint a superadmin** — the first one must be promoted manually, once:
 
 ```sql
 UPDATE public.user_roles

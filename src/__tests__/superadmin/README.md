@@ -120,14 +120,20 @@ it('CRITICAL: packs BOTH full_name and role into user_metadata payload', async (
 });
 ```
 
-> ⚠️ **Reality note (corrected):** Although `addUser` packs `role` into the
-> `user_metadata` payload, the DB trigger `handle_new_user()` does **NOT** read it
-> — it hardcodes the default `'member'` role (`supabase/setup.sql:94-96`). The
-> requested role is applied in a **second step**: the app updates the `user_roles`
-> table after `createUser`. The `role` key in `user_metadata` is currently
-> **vestigial**. `user_roles` is the authorization source of truth — never
-> `user_metadata`. (This test still validly checks the payload shape; it does not
-> imply the trigger consumes `role`.)
+> ℹ️ **Reality note (Mark IV, current):** `addUser` packs `full_name` and `role` into the
+> `user_metadata` payload, and the DB trigger `handle_new_user()` **reads both**
+> (`supabase/setup.sql:91-123`). The trigger applies the requested role to `user_roles` at
+> creation — defaulting to `'member'` only when no `role` key is present — and writes
+> `full_name` to `profiles`. **There is no second-step `user_roles` update in the app;** the
+> trigger is the whole mechanism, so this payload is load-bearing, not vestigial. That makes
+> the assertion above a real regression guard: drop either key and user creation silently
+> degrades (wrong role, or a NULL display name).
+>
+> `user_roles` remains the authorization source of truth — every access check reads it, never
+> `user_metadata`. The trigger is the one narrow exception: it runs `SECURITY DEFINER` at
+> creation time, and the only surface that sets `role` is the server-side admin client
+> (service-role key). Self-signup sends no `role`
+> (`src/app/api/auth/signup/route.ts`), so it lands as `'member'`.
 
 ---
 
@@ -238,7 +244,7 @@ jest.mock('@/app/(superadmin)/superadmin-portal/actions', () => ({
 |-----------|-------------------|---------|
 | `AddUserForm.test.tsx` | Password match validation | Ensures confirm password field works |
 | `EditUserForm.test.tsx` | Email field is `disabled` | Prevents email modification |
-| `actions.test.ts` | `user_metadata` contains `full_name` AND `role` | Verifies the `createUser` payload shape. NOTE: the trigger does NOT read `role` (defaults to `'member'`); the role is applied separately via a `user_roles` update. |
+| `actions.test.ts` | `user_metadata` contains `full_name` AND `role` | Verifies the `createUser` payload shape. The Mark IV trigger reads BOTH keys and applies them at creation (`supabase/setup.sql:91-123`) — there is no second-step `user_roles` update, so dropping either key silently breaks user creation. |
 | `SuperadminPortalPageContent.test.tsx` | Only 6 cards rendered | Verifies pagination limit enforcement |
 | `actions.test.ts` (RBAC) | Member/Admin denied superadmin access | Ensures route protection works |
 

@@ -78,7 +78,7 @@ After a successful signup:
 
 - Supabase creates the auth user
 - user metadata stores a display name only
-- a Postgres trigger assigns the default `member` role in `public.user_roles`
+- a Postgres trigger assigns the default `member` role in `public.user_roles` — the signup route sends no `role` key, so public signups always land as `member`
 - Next.js cache is invalidated with `revalidatePath('/', 'layout')`
 - the client calls `router.refresh()` before navigation
 

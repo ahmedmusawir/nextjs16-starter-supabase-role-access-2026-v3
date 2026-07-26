@@ -4,7 +4,11 @@
 Starter Kit v3 build — hardening a fresh v2 clone via the `starter-kit-cleaner` skill.
 
 ## Last action
-2026-06-29 — **★ GATE 10 CLOSED — KIT PERFECTION CAMPAIGN COMPLETE (all 10 gates closed). ★** FINAL gate. Phase B docs harvest done: COMPONENT_REGISTRY v1.1 (drift fixed, AppShellPage/Sheet real), stale-debt purged (`superadmin-add-user`, `ThemeToggler`→`ThemeToggle`), STARTER_KIT_HANDBOOK v1.0→v1.1 (LESSONS_BIN HARVESTED), AUTH_MANUAL v1.2, UI-UX v1_3, APP_ARCHITECTURE v1.2, FRONTEND_FIRST v1.1.2; teaching examples re-pointed to live files; stale test count (81→76) + `next/head`→App-Router `metadata` fixed. Verified: cold build EXIT 0, 76/76, re-greps clean. Phase B commits `6163c17`/`572d447`/`8d1a418`/`4dd8151`/`1c0881c` + the final two-fix commit (81→76 + next/head) + this close-log — **all committed AND pushed by the operator (2026-06-29)** on branch `gate-2-app-shell`. Working tree clean. `main` untouched at `c3692d5` (merge/tag pending operator). BACKLOG (none blocking): doctrine-sync to MissionControl/CP-v1 (`DOCTRINE_SYNC_MANIFEST`); canonical doctrine repo + skill-management design sessions.
+2026-07-26 (late) — **★ SESSION COMPLETE — RECON → DOC TRUTH PASS → AUDIT ZERO → README. Committed. ★** All four gates green and verified at close: cold build **EXIT 0 / 16 routes**, `tsc --noEmit` **EXIT 0**, jest **76/76 (10 suites)**, **`npm audit` = 0 vulnerabilities** (full AND `--omit=dev`). Killed recon red #1: `docs/setup.sql` fossil **DELETED**, `docs/DATABASE_SETUP.md` re-pointed at `supabase/setup.sql` (the one true schema file) with the Mark IV trigger inline. Killed recon red #2: `next ^16.2.12` + `postcss ^8.5.23` (dep+override lockstep) + `brace-expansion` + `js-yaml` + `sharp ^0.35.3` overrides → audit zero; `docs/SECURITY.md` rewritten (its old "prod = 0" claim had gone false). Stale docs corrected: superadmin test README, TESTING (4/17 → 10/76), AUTHORIZATION, AUTHENTICATION, ARCHITECTURE (`(account)` group). `README.md` built from a 7-line stub into a full product README, every figure read from disk at write time. Doctrine fixed: session logs → `agent_docs/SESSIONS/`, `CLAUDE.md` corrected, `CHANGELOG.md` created, `agent_docs/RESPONSES/` logging now honored. **OPEN:** the Playwright E2E badge was withheld — no config, no specs; operator to earn it or label it `scaffolded`.
+
+(Prior) 2026-07-26 — **RECON + DOCTRINE FIX. Docs Truth Pass PLANNED, NOT EXECUTED.** Ran `stark-recon` v1.1 on the post-campaign kit → `agent_docs/RECON/RECON_starter-kit-v3_post-campaign_2026-07-26.md`. Triad green from cold (build EXIT 0 / 16 routes, tsc 0, jest 76/76); handbook v1.1 + registry v1.1 verified true; zero demo residue. **2 RED findings:** (1) `docs/setup.sql` is a stale pre-Mark-IV dumb trigger and `docs/DATABASE_SETUP.md` points fresh clones at it → resurrects both Gate-10-fixed bugs with **no** second-step safety net; (2) `npm audit --omit=dev` now **4 HIGH** (`sharp@0.34.5` via `next@16.2.6`, libvips CVEs) — `docs/SECURITY.md`'s "prod=0" claim is stale. Also fixed doctrine: session logs now live in `agent_docs/SESSIONS/` (3 moved out of root); `CLAUDE.md` corrected in 3 places (line 510 was the culprit); `CHANGELOG.md` created at root. **No application code touched all session. Zero git commands run.**
+
+(Prior) 2026-06-29 — **★ GATE 10 CLOSED — KIT PERFECTION CAMPAIGN COMPLETE (all 10 gates closed). ★** FINAL gate. Phase B docs harvest done: COMPONENT_REGISTRY v1.1 (drift fixed, AppShellPage/Sheet real), stale-debt purged (`superadmin-add-user`, `ThemeToggler`→`ThemeToggle`), STARTER_KIT_HANDBOOK v1.0→v1.1 (LESSONS_BIN HARVESTED), AUTH_MANUAL v1.2, UI-UX v1_3, APP_ARCHITECTURE v1.2, FRONTEND_FIRST v1.1.2; teaching examples re-pointed to live files; stale test count (81→76) + `next/head`→App-Router `metadata` fixed. Verified: cold build EXIT 0, 76/76, re-greps clean. Phase B commits `6163c17`/`572d447`/`8d1a418`/`4dd8151`/`1c0881c` + the final two-fix commit (81→76 + next/head) + this close-log — **all committed AND pushed by the operator (2026-06-29)** on branch `gate-2-app-shell`. Working tree clean. `main` untouched at `c3692d5` (merge/tag pending operator). BACKLOG (none blocking): doctrine-sync to MissionControl/CP-v1 (`DOCTRINE_SYNC_MANIFEST`); canonical doctrine repo + skill-management design sessions.
 
 (Prior) 2026-06-28 — **GATE 10 PHASE A CLOSED.** Upgraded `setup.sql` trigger to **Mark IV** (`71ad14e`): honors metadata role, reads `full_name`, idempotent; no writer changes. **RESOLVES both KNOWN_ISSUES bugs** (no longer deferred — FIXED in shipped schema). **LIVE PROOF** on the CP v1 Supabase: schema matches; live trigger was **already Mark IV** (dumb trigger only ever existed in the kit's old `setup.sql`, never live); create-then-delete test → `full_name='Mark IV Test'` (not null) + `role='admin'` (not downgraded) → both fixed live; test user deleted clean, DB back to 4 / zero residue. Resolves the inventory's headline conflict (setup.sql now matches handbook + migration + live DB). NOTE: CP v1 + MissionControl share this Supabase — both already on Mark IV; the fix protects FUTURE clones. Repo: cold build EXIT 0, 76/76, `main` untouched at `c3692d5`.
 
@@ -31,7 +35,18 @@ Starter Kit v3 build — hardening a fresh v2 clone via the `starter-kit-cleaner
 (Prior) Phase 8 COMPLETE — v3 verified clean. All five grep gates ZERO. Superadmin intact. Verification triad from cold: tsc EXIT 0; npm test 11 suites / 81/81; cold `npm run build` with NO `.env.local` clean.
 
 ## Pending
-**None — campaign complete, all committed + pushed (2026-06-29).** Working tree clean. Branch `gate-2-app-shell` is the merge/tag candidate; `main` still at `c3692d5` until the operator merges/tags.
+**None blocking — session closed and committed.** Working tree clean at close.
+
+One open cosmetic decision: **the Playwright E2E badge.** The README deliberately omits it
+because `@playwright/test` is installed with `test:e2e` scripts but there is **no
+`playwright.config.*` and zero spec files** — the badge would be an unpointable claim.
+Options: (a) add a real config + at least one passing spec, then the badge is earned;
+(b) use an explicitly-labelled `E2E-scaffolded` badge. Operator's call.
+
+**Session artifacts (all committed):**
+- Recon ground truth: `agent_docs/RECON/RECON_starter-kit-v3_post-campaign_2026-07-26.md`
+- Response logs (5): `agent_docs/RESPONSES/response_2026-07-26_*.md`
+- Session log: `agent_docs/SESSIONS/session_2026-07-26.md`
 
 ## Current session
 2026-06-25 — KIT hardening underway (v3 is now the generic base, not "spawned off superadmin").
@@ -55,12 +70,18 @@ Ground truth = recon report `agent_docs/RECON/RECON_starter-kit-v3_kit-hardening
 - **Round-2 fix `d7dec9d`:** breakpoint `lg`→`xl` in AppShellPage (rail persists ≥`xl` 1280; hamburger + drawer <`xl`) + admin card grid `grid-cols-1 md:2 lg:3` → `grid-cols-1 xl:grid-cols-2`. Operator-diagnosed: rail persisted too early (1024) → user-card Edit+Delete overflow. Fixed in the blessed primitive so Gate 3 inherits it. NOTE: superadmin's `SuperadminPortalPageContent.tsx` carries the same `md:2/lg:3` card grid → needs the same `xl` treatment in Gate 3.
 
 ## Next step — WHEN WE RETURN, START HERE
-**★ CAMPAIGN COMPLETE — all 10 gates closed, committed + pushed. ★** Nothing in flight; working tree clean. Pick up from the BACKLOG (none blocking), operator chooses order:
-1. **Merge/tag decision** — `gate-2-app-shell` → `main` (e.g. tag `v3`). `main` is still at `c3692d5`.
-2. **Doctrine-sync** to MissionControl / CP-v1 (see `DOCTRINE_SYNC_MANIFEST`) — propagate the hardened docs (handbook v1.1, registry v1.1, AUTH_MANUAL v1.2, UI-UX v1_3, APP_ARCHITECTURE v1.2, FRONTEND_FIRST v1.1.2) to the live projects.
-3. **Canonical doctrine repo** + skill-management design sessions.
+**★ Tonight's campaign is CLOSED. Nothing in flight. ★** Everything below is optional backlog; operator chooses order.
+
+1. **Playwright decision** (see Pending) — earn the E2E badge with a real config + spec, or label it `scaffolded`. Smallest, most visible item.
+2. **Tag decision** — `main` carries the merged Gate campaign plus tonight's work. A `v3` tag was never applied. Good moment for one: the kit is at audit-zero with a real README.
+3. **Doctrine-sync** to MissionControl / CP-v1 (`DOCTRINE_SYNC_MANIFEST`) — propagate handbook v1.1, registry v1.1, AUTH_MANUAL v1.2, UI-UX v1_3, APP_ARCHITECTURE v1.2, FRONTEND_FIRST v1.1.2, **plus the `CLAUDE.md` session-path + response-logging fixes** made tonight.
+4. **`stark-recon` skill improvement** (lesson from tonight) — `RECON_MISSION.md` Section 6 should capture `npm audit --json` metadata + the full package list, NOT a grep for a suspected package name. Tonight's recon under-reported red #2 exactly that way. Section 4's numbered-color grep also needs a `grep -v "translate-"` exclusion (false positives on `translate-x-*`).
+5. **Canonical doctrine repo** + skill-management design sessions.
+6. **First `next/image` usage must be smoke-tested** — `sharp` is pinned via an override across a minor boundary (0.34 → 0.35) and nothing currently exercises the image pipeline. A green build does not prove it works. Noted in `docs/SECURITY.md`.
 
 **Standing rule (active):** the operator owns git — I edit files + verify, then hand over commands. I do NOT run git unless explicitly told.
+
+**Standing rule (active, added 2026-07-26):** session logs live in `agent_docs/SESSIONS/`, never the repo root. `RECOVERY.md` is the ONLY state file at the root. Every substantive artifact (plan, report, verification result) is written to `agent_docs/RESPONSES/` **before** it is printed on screen — the session file tracks status, RESPONSES holds the artifact; both writes fire.
 
 ## Invariants (do not violate)
 - KEEP superadmin (three-tier RBAC).

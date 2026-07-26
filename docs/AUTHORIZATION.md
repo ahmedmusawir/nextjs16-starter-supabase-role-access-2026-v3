@@ -74,16 +74,23 @@ The enum values map directly to the Postgres enum values.
 
 New public signups are not manually assigned in application code.
 
-Instead, a **Postgres trigger** automatically inserts a `member` role row when a new auth user is created.
+Instead, a **Postgres trigger** (`handle_new_user()`, `supabase/setup.sql`) inserts the role row when a new auth user is created. It reads the `role` key from `user_metadata` and falls back to `member` when that key is absent.
 
-This is the factory default behavior.
+Public signup never sends a `role` key, so **every public signup is a `member`**. This is the factory default behavior.
+
+The same trigger is how the Superadmin Portal assigns `admin`: the server-side admin client passes the chosen role in `user_metadata` at creation time. There is no second-step `user_roles` update in application code.
 
 ### Why this is important
 
 - role assignment is centralized in the database
 - signup route remains simple
-- every new user gets a deterministic baseline role
+- every new public user gets a deterministic baseline role
 - no frontend role flags are required
+
+> **This is not a `user_metadata` authorization pathway.** The trigger runs `SECURITY DEFINER`
+> at creation only, and the sole surface that can set `role` is the service-role admin client.
+> Once the row exists, `public.user_roles` is the only thing any access check reads — see
+> [Why Authorization Does Not Live in `user_metadata`](#why-authorization-does-not-live-in-user_metadata) below.
 
 ---
 

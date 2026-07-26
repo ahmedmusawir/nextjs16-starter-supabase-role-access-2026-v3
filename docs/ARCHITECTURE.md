@@ -120,7 +120,7 @@ This starter fixes that by using:
 - A dedicated `user_roles` table
 - A typed `AppRole` enum in the app layer
 - Server-side layout protection
-- Database triggers for default membership
+- A database trigger that assigns the role row at creation (defaulting to `member`)
 - Service-role admin provisioning for privileged user creation
 - Postgres RLS for final enforcement
 
@@ -153,6 +153,7 @@ Protected route groups are separated by responsibility:
 - `(members)`
 - `(admin)`
 - `(superadmin)`
+- `(account)` — cross-portal account chrome (e.g. `/profile`), reachable by `ADMIN` or `MEMBER`; superadmin is console-managed and excluded
 
 Each protected layout performs a server-side role check before rendering children.
 
